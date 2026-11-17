@@ -1,0 +1,9 @@
+{
+  "appId": "com.delivery.box",
+  "appName": "money dl",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}
