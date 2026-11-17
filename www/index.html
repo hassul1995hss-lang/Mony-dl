@@ -1,1 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" id="metaTheme" content="#059669">
+<title>money dl</title>
+<style>
+:root {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --card-2: #f8fafc;
+  --tx: #0f172a;
+  --mut: #64748b;
+  --bd: #e2e8f0;
+  --hd-grad: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --hd-solid: #059669;
+  --g: #059669;
+  --g-bg: #ecfdf5;
+  --r: #e11d48;
+  --r-bg: #fff1f2;
+  --amb: #d97706;
+  --amb-bg: #fffbeb;
+  --shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 25px rgba(5, 150, 105, 0.22);
+  --kp-bg: #ffffff;
+  --kp-active: #e2e8f0;
+  color-scheme: light;
+}
 
+:root[data-theme="dark"] {
+  --bg: #0b1120;
+  --card: #1e293b;
+  --card-2: #162032;
+  --tx: #f8fafc;
+  --mut: #94a3b8;
+  --bd: #334155;
+  --hd-grad: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  --hd-solid: #064e3b;
+  --g: #34d399;
+  --g-bg: rgba(16, 185, 129, 0.14);
+  --r: #fb7185;
+  --r-bg: rgba(244, 63, 94, 0.14);
+  --amb: #fbbf24;
+  --amb-bg: rgba(245, 158, 11, 0.15);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 10px 28px rgba(4, 120, 87, 0.35);
+  --kp-bg: #1e293b;
+  --kp-active: #334155;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--tx);
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 540px;
+  margin-inline: auto;
+  transition: background-color 0.22s ease, color 0.22s ease;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  display: inline-block;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background: var(--hd-grad);
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: 0.2px;
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+}
+
+.hd-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hd-btn {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  padding: 7px 11px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.hd-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* Hero Balance Card */
+#bal {
+  background: var(--hd-grad);
+  color: #fff;
+  margin: 12px 14px 4px;
+  border-radius: 18px;
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.bal-lbl {
+  font-size: 12.5px;
+  opacity: 0.88;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bal-val {
+  font-size: 34px;
+  font-weight: 800;
+  text-align: center;
+  margin: 2px 0 12px;
+  letter-spacing: -0.5px;
+}
+
+.bal-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stat-pill {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.stat-pill.has-debt {
+  background: rgba(251, 191, 36, 0.26);
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.stat-k {
+  font-size: 11.5px;
+  opacity: 0.9;
+  display: block;
+}
+
+.stat-v {
+  font-size: 15px;
+  font-weight: 800;
+  margin-top: 1px;
+}
+
+/* Main List */
+#list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 14px 16px;
+}
+
+.grp-card {
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  margin-top: 12px;
+  padding: 4px 14px 6px;
+  box-shadow: var(--shadow);
+}
+
+.gh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 8px;
+  font-weight: 800;
+  font-size: 14px;
+  border-bottom: 1px solid var(--bd);
+}
+
+.gh .c {
+  color: #fff;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 1px 8px;
+}
+
+.gh .t {
+  margin-inline-start: auto;
+  font-size: 14.5px;
+}
+
+.it {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--bd);
+}
+
+.it:last-child {
+  border-bottom: 0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.it .n {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14.5px;
+  min-width: 0;
+}
+
+.it .m {
+  font-size: 12px;
+  color: var(--mut);
+  font-weight: 500;
+}
+
+.it-amt {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.x {
+  background: var(--card-2);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  color: var(--mut);
+  font-size: 14px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+
+.x:active {
+  background: var(--r-bg);
+  color: var(--r);
+  border-color: var(--r);
+}
+
+.debt-actions {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sm {
+  background: var(--g-bg);
+  color: var(--g);
+  border: 1px solid var(--g);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sm:active {
+  transform: scale(0.96);
+}
+
+.chk-lbl {
+  font-size: 12px;
+  color: var(--mut);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 48px;
+  padding: 24px 16px;
+  background: var(--card);
+  border: 1px dashed var(--bd);
+  border-radius: 18px;
+  color: var(--mut);
+}
+
+.empty-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+/* Footer Action Bar */
+footer {
+  background: var(--card);
+  border-top: 1px solid var(--bd);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.act-btn {
+  border: 0;
+  border-radius: 14px;
+  padding: 13px 12px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.15s ease;
+}
+
+.act-btn:active {
+  transform: scale(0.96);
+}
+
+.act-btn.r {
+  background: var(--r-bg);
+  color: var(--r);
+  border: 1.5px solid var(--r);
+}
+
+.act-btn.g {
+  background: var(--hd-grad);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.28);
+}
+
+/* Overlay Screens */
+.ov {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 10;
+  overflow-y: auto;
+  max-width: 540px;
+  margin-inline: auto;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.16s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.h {
+  display: none !important;
+}
+
+.top {
+  background: var(--hd-grad);
+  color: #fff;
+  padding: 13px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-weight: 800;
+  font-size: 17px;
+}
+
+.top button {
+  background: rgba(255, 255, 255, 0.18);
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pad {
+  padding: 14px 16px;
+}
+
+.disp {
+  background: var(--g-bg);
+  border: 2px solid var(--g);
+  color: var(--g);
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  direction: ltr;
+}
+
+.disp.exp-mode {
+  background: var(--r-bg);
+  border-color: var(--r);
+  color: var(--r);
+}
+
+.disp span {
+  font-size: 24px;
+  font-weight: 800;
+  opacity: 0.85;
+}
+
+.disp b {
+  flex: 1;
+  text-align: center;
+  font-size: 38px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.disp button {
+  background: none;
+  border: 0;
+  color: inherit;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input:not([type]) {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--bd);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--tx);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+input:focus {
+  border-color: var(--g);
+}
+
+input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--g);
+  margin: 0;
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.chip {
+  padding: 11px 6px;
+  border: 1.5px solid var(--bd);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--tx);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip.on {
+  border-color: var(--r);
+  background: var(--r-bg);
+  color: var(--r);
+}
+
+.debt-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1.5px solid var(--bd);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Numeric Keypad */
+#kp {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: auto;
+  padding: 10px 16px;
+  direction: ltr;
+}
+
+#kp button {
+  padding: 15px 0;
+  font-size: 22px;
+  font-weight: 700;
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  background: var(--kp-bg);
+  color: var(--tx);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.1s ease, transform 0.08s ease;
+}
+
+#kp button:active {
+  background: var(--kp-active);
+  transform: scale(0.96);
+}
+
+.save {
+  margin: 4px 16px 14px;
+  padding: 14px;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  font-size: 16px;
+  background: var(--hd-grad);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+}
+
+.save:active {
+  transform: scale(0.98);
+}
+
+.save.r {
+  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25);
+}
+
+.save.w {
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  margin: 12px 0 0;
+  width: 100%;
+}
+
+.save.o {
+  background: var(--card);
+  color: var(--g);
+  border: 1.5px solid var(--g);
+  box-shadow: none;
+  margin: 10px 0 0;
+  width: 100%;
+}
+
+.save.d {
+  background: var(--card);
+  color: var(--r);
+  border: 1.5px solid var(--bd);
+  box-shadow: none;
+  margin: 10px 0 0;
+  width: 100%;
+}
+
+/* Report Screen */
+.rep-card {
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+
+.lb {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mut);
+  margin: 10px 0 5px;
+}
+
+.diff-box {
+  margin-top: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.diff-box.ok {
+  background: var(--g-bg);
+  color: var(--g);
+}
+
+.diff-box.bad {
+  background: var(--r-bg);
+  color: var(--r);
+}
+
+.diff-box.warn {
+  background: var(--amb-bg);
+  color: var(--amb);
+}
+
+pre {
+  white-space: pre-wrap;
+  font: 13.5px/1.65 inherit;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 0;
+  color: var(--tx);
+}
+
+.k {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  margin-bottom: 6px;
+  color: var(--tx);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.pos { color: var(--g); }
+.neg { color: var(--r); }
+.warn { color: var(--amb); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand">
+      <div class="brand-icon">💵</div>
+      <span dir="ltr">money dl</span>
+    </div>
+    <div class="hd-actions">
+      <button class="hd-btn" id="themeBtn" aria-label="تبديل المظهر">🌙 مظلم</button>
+      <button class="hd-btn" id="rb">📋 الجرد</button>
+    </div>
+  </header>
+
+  <div id="bal"></div>
+  <div id="list"></div>
+
+  <footer>
+    <button class="act-btn r" id="minus" aria-label="مصروف">− مصروف</button>
+    <button class="act-btn g" id="plus" aria-label="طلبية">+ طلبية</button>
+  </footer>
+</div>
+
+<!-- Entry Modal -->
+<div id="ent" class="ov h">
+  <div class="top">
+    <button id="back" aria-label="رجوع">→</button>
+    <span id="et"></span>
+  </div>
+  <div class="pad">
+    <div class="disp" id="dispBox">
+      <span>$</span>
+      <b id="amt">0</b>
+      <button id="bk" aria-label="مسح">⌫</button>
+    </div>
+    <input id="note" list="nl" autocomplete="off" style="margin-top:12px">
+    <datalist id="nl"></datalist>
+    <div class="chips" id="cats"></div>
+    <label id="debtL" class="debt-card">
+      <input type="checkbox" id="debt">
+      <span>⏳ دين (الزبون لم يدفع الآن)</span>
+    </label>
+  </div>
+  <div id="kp"></div>
+  <button class="save" id="save">حفظ العملية</button>
+</div>
+
+<!-- Report & Closing Modal -->
+<div id="rep" class="ov h">
+  <div class="top">
+    <button id="rback" aria-label="رجوع">→</button>
+    <span>الجرد وإقفال اليوم</span>
+  </div>
+  <div class="pad">
+    <div class="rep-card">
+      <div id="sur"></div>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <div style="flex:1">
+          <div class="lb" style="margin-top:0">الصندوق الثابت $</div>
+          <input id="oU" type="number" inputmode="decimal">
+        </div>
+        <div style="flex:1">
+          <div class="lb" style="margin-top:0">عدّيت فعلياً $</div>
+          <input id="cnt" type="number" inputmode="decimal" placeholder="0.00">
+        </div>
+      </div>
+      <div id="diff"></div>
+    </div>
+
+    <div class="lb">التقرير المفصّل</div>
+    <pre id="pre"></pre>
+
+    <div class="lb">رقم واتساب المالك (مع رمز الدولة)</div>
+    <input id="ph" type="tel" inputmode="tel" placeholder="9617xxxxxxx">
+
+    <button class="save w" id="wa">مشاركة عبر واتساب 📲</button>
+    <button class="save o" id="copy">نسخ التقرير 📋</button>
+    <button class="save d" id="close">إقفال اليوم وبدء يوم جديد 🔒</button>
+
+    <div class="lb" style="margin-top:18px">سجل الأيام السابقة</div>
+    <div id="hist"></div>
+  </div>
+</div>
+
+<script>
+const K = 'dlv-box-2';
+const TK = 'dlv-theme-pref';
+let S = { oU: 200, ph: '', tx: [], hist: [], names: [] };
+
+try {
+  const r = localStorage.getItem(K);
+  if (r) S = Object.assign(S, JSON.parse(r));
+} catch (e) {}
+
+const save = () => {
+  try { localStorage.setItem(K, JSON.stringify(S)); } catch (e) {}
+};
+
+const $ = i => document.getElementById(i);
+const n = v => parseFloat(v) || 0;
+const f = (v, d = 2) => v.toLocaleString('en-US', { maximumFractionDigits: d });
+const M = v => `<span class="num">${f(v)}$</span>`;
+const Mtxt = v => f(v) + '$';
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* Theme Management */
+function getInitialTheme() {
+  try {
+    const saved = localStorage.getItem(TK);
+    if (saved === 'dark' || saved === 'light') return saved;
+  } catch (e) {}
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const isDark = theme === 'dark';
+  $('themeBtn').textContent = isDark ? '☀️ عادي' : '🌙 مظلم';
+  const meta = $('metaTheme');
+  if (meta) meta.setAttribute('content', isDark ? '#064e3b' : '#059669');
+  try { localStorage.setItem(TK, theme); } catch (e) {}
+}
+
+let currentTheme = getInitialTheme();
+applyTheme(currentTheme);
+
+$('themeBtn').onclick = () => {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  applyTheme(currentTheme);
+};
+
+/* Core Accounting Logic */
+const L = { fuel: '⛽ بنزين', exp: '🧾 مصروف آخر', pers: '💸 سحب شخصي' };
+const Lplain = { fuel: 'بنزين', exp: 'مصروف آخر', pers: 'سحب شخصي' };
+const open = t => t.type == 'order' && t.debt && !t.settled;
+const eff = t => t.type == 'order' ? (open(t) ? 0 : t.fee) : -t.amt;
+const bal = () => S.tx.reduce((a, t) => a + eff(t), n(S.oU));
+
+function build() {
+  const O = n(S.oU);
+  const ords = S.tx.filter(t => t.type == 'order' && !(open(t) && t.inc === false));
+  const T = ords.reduce((a, t) => a + t.fee, 0);
+  const ded = [];
+  ords.filter(open).forEach(t => ded.push(['دين ' + t.name, t.fee]));
+  S.tx.filter(t => t.type != 'order').forEach(t => ded.push([Lplain[t.type] + (t.note ? ' (' + t.note + ')' : ''), t.amt]));
+  const D = ded.reduce((a, d) => a + d[1], 0);
+  const net = T - D;
+
+  let s = `📋 جرد يوم ${new Date().toLocaleDateString('en-GB')}\n\nالطلبيات:\n`;
+  s += ords.length ? ords.map((t, i) => `${i + 1}. ${t.name || 'طلبية'}: دلفري ${Mtxt(t.fee)}${open(t) ? ' (دين)' : ''}`).join('\n') : '—';
+  s += `\n\nمجموع الدلفري: ${Mtxt(T)}\n\nالخصومات:\n`;
+  s += ded.length ? ded.map(d => `- ${d[0]}: ${Mtxt(d[1])}`).join('\n') : '—';
+  s += `\nمجموع الخصومات: ${Mtxt(D)}\n\nالصافي (الدلفري − الخصومات): ${Mtxt(net)}\nالصندوق الثابت (يبقى معي): ${Mtxt(O)}\n✅ الزيادة المسلّمة للمالك: ${Mtxt(net)}`;
+  return s;
+}
+
+function row(t) {
+  const nm = t.type == 'order' ? esc(t.name || 'طلبية') : esc(t.note || Lplain[t.type]);
+  const a = t.type == 'order' ? t.fee : t.amt;
+  const c = t.type == 'order' ? (open(t) ? 'var(--amb)' : 'var(--g)') : 'var(--r)';
+  let x = '';
+  if (open(t)) {
+    x = `<div class="debt-actions">
+      <button class="sm" onclick="settle(${t.id})">تم التسديد ✓</button>
+      <label class="chk-lbl"><input type="checkbox" ${t.inc === false ? '' : 'checked'} onchange="inc(${t.id},this.checked)"> ضمن الجرد</label>
+    </div>`;
+  }
+  return `<div class="it">
+    <span class="dot" style="background:${c}"></span>
+    <div class="n">${nm} <span class="m">· ${t.time}</span>${x}</div>
+    <span class="it-amt" style="color:${c}">${M(a)}</span>
+    <button class="x" onclick="del(${t.id})" aria-label="حذف">✕</button>
+  </div>`;
+}
+
+function grp(title, arr, col) {
+  if (!arr.length) return '';
+  const s = arr.reduce((a, t) => a + (t.type == 'order' ? t.fee : t.amt), 0);
+  return `<div class="grp-card">
+    <div class="gh">
+      <span>${title}</span>
+      <span class="c" style="background:${col}">${arr.length}</span>
+      <span class="t" style="color:${col}">${M(s)}</span>
+    </div>
+    ${arr.slice().reverse().map(row).join('')}
+  </div>`;
+}
+
+function render() {
+  const b = bal();
+  const sp = b - n(S.oU);
+  const out = S.tx.filter(open).reduce((a, t) => a + t.fee, 0);
+  const T = S.tx;
+
+  $('bal').innerHTML = `
+    <div class="bal-lbl">إجمالي الصندوق الحالي</div>
+    <div class="bal-val">${M(b)}</div>
+    <div class="bal-stats">
+      <div class="stat-pill">
+        <span class="stat-k">الزيادة فوق الصندوق</span>
+        <div class="stat-v">${M(sp)}</div>
+      </div>
+      <div class="stat-pill ${out > 0 ? 'has-debt' : ''}">
+        <span class="stat-k">ديون عند الزبائن</span>
+        <div class="stat-v">${M(out)}</div>
+      </div>
+    </div>`;
+
+  const g = ty => T.filter(t => t.type == ty);
+  $('list').innerHTML = T.length
+    ? grp('💵 الدلفري', T.filter(t => t.type == 'order' && !open(t)), 'var(--g)') +
+      grp('⏳ ديون غير محصّلة', T.filter(open), 'var(--amb)') +
+      grp('⛽ بنزين', g('fuel'), 'var(--r)') +
+      grp('🧾 مصاريف أخرى', g('exp'), 'var(--r)') +
+      grp('💸 سحب شخصي', g('pers'), 'var(--r)')
+    : `<div class="empty-state">
+        <div class="empty-icon">💵</div>
+        <div style="font-weight:700;color:var(--tx);margin-bottom:4px">لا توجد عمليات مسجلة اليوم</div>
+        <div>اضغط <b>+ طلبية</b> لإضافة توصيلة، أو <b>− مصروف</b> لتسجيل نفقة</div>
+      </div>`;
+
+  const a = new Set(S.names || []);
+  T.forEach(t => t.name && a.add(t.name));
+  $('nl').innerHTML = [...a].map(x => `<option value="${esc(x)}">`).join('');
+
+  $('sur').innerHTML = `
+    <div class="lb" style="margin-top:0">الزيادة المطلوب تسليمها للمالك</div>
+    <div style="font-size:32px;font-weight:800" class="${sp < 0 ? 'neg' : 'pos'}">${M(sp)}</div>`;
+
+  $('pre').textContent = build();
+  diff();
+
+  $('hist').innerHTML = S.hist.length
+    ? S.hist.slice().reverse().map(d => `<div class="k">
+        <span>📅 ${d.date} <span class="m">(${d.n} عملية)</span></span>
+        <span class="pos" style="font-weight:800">${M(d.sur != null ? d.sur : d.end)}</span>
+      </div>`).join('')
+    : '<div class="lb">لا توجد أيام سابقة محفوظة</div>';
+}
+
+function diff() {
+  if ($('cnt').value === '') {
+    $('diff').innerHTML = '';
+    return;
+  }
+  const d = n($('cnt').value) - bal();
+  if (Math.abs(d) < 0.005) {
+    $('diff').innerHTML = '<div class="diff-box ok">✅ الصندوق مطابق تماماً</div>';
+  } else {
+    $('diff').innerHTML = `<div class="diff-box ${d < 0 ? 'bad' : 'warn'}">${d < 0 ? '⚠️ ناقص' : '⚠️ زائد'} ${M(Math.abs(d))} عن المفروض — راجع العمليات</div>`;
+  }
+}
+
+const del = id => {
+  if (confirm('حذف هذه العملية؟')) {
+    S.tx = S.tx.filter(t => t.id !== id);
+    save();
+    render();
+  }
+};
+const settle = id => {
+  S.tx.find(t => t.id === id).settled = true;
+  save();
+  render();
+};
+const inc = (id, v) => {
+  S.tx.find(t => t.id === id).inc = v;
+  save();
+  render();
+};
+
+/* Entry Screen */
+let mode, cat, a = '';
+function amt() { $('amt').textContent = a || '0'; }
+function cats() {
+  $('cats').innerHTML = Object.keys(L).map(k =>
+    `<button class="chip ${k == cat ? 'on' : ''}" onclick="cat='${k}';cats()">${L[k]}</button>`
+  ).join('');
+}
+
+function openE(m) {
+  mode = m;
+  cat = 'fuel';
+  a = '';
+  amt();
+  $('debt').checked = false;
+  $('note').value = '';
+  const p = m == 'plus';
+  $('et').textContent = p ? '➕ طلبية جديدة' : '➖ مصروف جديد';
+  $('dispBox').classList.toggle('exp-mode', !p);
+  $('debtL').classList.toggle('h', !p);
+  $('cats').classList.toggle('h', p);
+  $('save').className = 'save' + (p ? '' : ' r');
+  $('save').textContent = p ? 'حفظ الطلبية ✓' : 'حفظ المصروف ✓';
+  $('note').placeholder = p ? 'اسم الطلبية أو الزبون...' : 'ملاحظة (اختياري)...';
+  if (p) $('note').setAttribute('list', 'nl');
+  else $('note').removeAttribute('list');
+  cats();
+  $('ent').classList.remove('h');
+}
+
+['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫'].forEach(k => {
+  const b = document.createElement('button');
+  b.textContent = k;
+  b.onclick = () => {
+    if (k == '⌫') a = a.slice(0, -1);
+    else if (k == '.') { if (a.includes('.')) return; a = a || '0'; a += '.'; }
+    else if (a.length < 8) a += k;
+    amt();
+  };
+  $('kp').appendChild(b);
+});
+
+$('bk').onclick = () => { a = a.slice(0, -1); amt(); };
+$('plus').onclick = () => openE('plus');
+$('minus').onclick = () => openE('minus');
+$('back').onclick = () => $('ent').classList.add('h');
+
+$('save').onclick = () => {
+  const v = parseFloat(a);
+  const nm = $('note').value.trim();
+  if (!v) { alert('أدخل المبلغ أولاً'); return; }
+  const t = {
+    id: Date.now(),
+    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+  };
+  if (mode == 'plus') {
+    if (!nm) { alert('أدخل اسم الطلبية أو الزبون'); return; }
+    Object.assign(t, { type: 'order', name: nm, fee: v, debt: $('debt').checked, inc: true });
+    S.names = S.names || [];
+    if (!S.names.includes(nm)) S.names.push(nm);
+  } else {
+    Object.assign(t, { type: cat, amt: v, note: nm });
+  }
+  S.tx.push(t);
+  save();
+  $('ent').classList.add('h');
+  render();
+};
+
+/* Report & Actions */
+$('rb').onclick = () => {
+  $('oU').value = S.oU;
+  $('ph').value = S.ph;
+  render();
+  $('rep').classList.remove('h');
+};
+$('rback').onclick = () => $('rep').classList.add('h');
+$('oU').oninput = e => { S.oU = n(e.target.value); save(); render(); };
+$('ph').oninput = e => { S.ph = e.target.value; save(); };
+$('cnt').oninput = diff;
+
+function num() {
+  let d = S.ph.replace(/\D/g, '');
+  if (d.startsWith('00')) d = d.slice(2);
+  else if (d.startsWith('0')) d = '961' + d.slice(1);
+  return d;
+}
+
+$('wa').onclick = () => {
+  const d = num();
+  if (d.length < 8) { alert('أدخل رقم واتساب المالك أولاً'); return; }
+  const url = 'https://wa.me/' + d + '?text=' + encodeURIComponent(build());
+  const w = window.open(url, '_blank');
+  if (!w) window.location.href = url;
+};
+
+$('copy').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(build());
+    alert('تم نسخ التقرير بنجاح ✓');
+  } catch (e) {
+    prompt('انسخ التقرير:', build());
+  }
+};
+
+$('close').onclick = () => {
+  if (!confirm('هل تريد إقفال اليوم؟ سيتم حفظ الصافي في سجل الأيام السابقة وبدء يوم جديد.')) return;
+  S.hist.push({
+    date: new Date().toLocaleDateString('en-GB'),
+    n: S.tx.length,
+    sur: bal() - n(S.oU)
+  });
+  S.tx = [];
+  save();
+  $('cnt').value = '';
+  $('rep').classList.add('h');
+  render();
+};
+
+render();
+</script>
+</body>
+</html>
