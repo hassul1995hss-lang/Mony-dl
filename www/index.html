@@ -349,7 +349,7 @@ header {
   margin-bottom: 8px;
 }
 
-/* Footer Action Bar */
+/* Footer Action Bar (RTL: first child = right, second child = left) */
 footer {
   background: var(--card);
   border-top: 1px solid var(--bd);
@@ -407,6 +407,10 @@ footer {
   animation: fadeIn 0.16s ease;
 }
 
+.ov.sub {
+  z-index: 20;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -425,6 +429,9 @@ footer {
   align-items: center;
   font-weight: 800;
   font-size: 17px;
+  position: sticky;
+  top: 0;
+  z-index: 3;
 }
 
 .top button {
@@ -439,6 +446,16 @@ footer {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  flex: none;
+}
+
+.top .del-arch {
+  margin-inline-start: auto;
+  width: auto;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(225, 29, 72, 0.35);
 }
 
 .pad {
@@ -511,32 +528,6 @@ input[type="checkbox"] {
   height: 17px;
   accent-color: var(--g);
   margin: 0;
-}
-
-.chips {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin: 12px 0 4px;
-}
-
-.chip {
-  padding: 11px 6px;
-  border: 1.5px solid var(--bd);
-  border-radius: 12px;
-  background: var(--card);
-  color: var(--tx);
-  font: inherit;
-  font-size: 13.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.chip.on {
-  border-color: var(--r);
-  background: var(--r-bg);
-  color: var(--r);
 }
 
 .debt-card {
@@ -668,29 +659,76 @@ input[type="checkbox"] {
   color: var(--amb);
 }
 
-pre {
-  white-space: pre-wrap;
-  font: 13.5px/1.65 inherit;
-  background: var(--card);
-  border: 1px solid var(--bd);
-  border-radius: 14px;
-  padding: 14px;
-  margin: 0;
-  color: var(--tx);
-}
-
+/* Archive List Items */
 .k {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 12px;
+  padding: 12px 14px;
   background: var(--card);
   border: 1px solid var(--bd);
-  border-radius: 12px;
-  margin-bottom: 6px;
+  border-radius: 14px;
+  margin-bottom: 8px;
   color: var(--tx);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease, border-color 0.15s ease;
+}
+
+.k:active {
+  transform: scale(0.98);
+  border-color: var(--g);
+}
+
+.arch-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--g-bg);
+  color: var(--g);
+  margin-top: 3px;
+}
+
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.arch-stat {
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  padding: 11px 12px;
+  text-align: center;
+}
+
+.arch-stat-k {
+  font-size: 12px;
+  color: var(--mut);
+  font-weight: 600;
+}
+
+.arch-stat-v {
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.debt-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: var(--amb-bg);
+  color: var(--amb);
+  margin-inline-start: 4px;
 }
 
 .pos { color: var(--g); }
@@ -715,8 +753,8 @@ pre {
   <div id="list"></div>
 
   <footer>
-    <button class="act-btn r" id="minus" aria-label="مصروف">− مصروف</button>
     <button class="act-btn g" id="plus" aria-label="طلبية">+ طلبية</button>
+    <button class="act-btn r" id="minus" aria-label="مصروف">− مصروف</button>
   </footer>
 </div>
 
@@ -732,9 +770,9 @@ pre {
       <b id="amt">0</b>
       <button id="bk" aria-label="مسح">⌫</button>
     </div>
-    <input id="note" list="nl" autocomplete="off" style="margin-top:12px">
+    <input id="note" autocomplete="off" style="margin-top:12px">
     <datalist id="nl"></datalist>
-    <div class="chips" id="cats"></div>
+    <datalist id="el"></datalist>
     <label id="debtL" class="debt-card">
       <input type="checkbox" id="debt">
       <span>⏳ دين (الزبون لم يدفع الآن)</span>
@@ -766,25 +804,32 @@ pre {
       <div id="diff"></div>
     </div>
 
-    <div class="lb">التقرير المفصّل</div>
-    <pre id="pre"></pre>
-
     <div class="lb">رقم واتساب المالك (مع رمز الدولة)</div>
     <input id="ph" type="tel" inputmode="tel" placeholder="9617xxxxxxx">
 
     <button class="save w" id="wa">مشاركة عبر واتساب 📲</button>
     <button class="save o" id="copy">نسخ التقرير 📋</button>
-    <button class="save d" id="close">إقفال اليوم وبدء يوم جديد 🔒</button>
+    <button class="save d" id="close">إقفال اليوم وأرشفة العمليات 🔒</button>
 
-    <div class="lb" style="margin-top:18px">سجل الأيام السابقة</div>
+    <div class="lb" style="margin-top:20px">أرشيف الأيام السابقة (اضغط للمراجعة)</div>
     <div id="hist"></div>
   </div>
+</div>
+
+<!-- Archive Day Review Modal -->
+<div id="archModal" class="ov sub h">
+  <div class="top">
+    <button id="aback" aria-label="رجوع">→</button>
+    <span id="archTitle">تفاصيل اليوم المؤرشف</span>
+    <button class="del-arch" id="archDelBtn">حذف 🗑️</button>
+  </div>
+  <div class="pad" id="archBody"></div>
 </div>
 
 <script>
 const K = 'dlv-box-2';
 const TK = 'dlv-theme-pref';
-let S = { oU: 200, ph: '', tx: [], hist: [], names: [] };
+let S = { oU: 200, ph: '', tx: [], hist: [], names: [], expNotes: [] };
 
 try {
   const r = localStorage.getItem(K);
@@ -829,32 +874,31 @@ $('themeBtn').onclick = () => {
 };
 
 /* Core Accounting Logic */
-const L = { fuel: '⛽ بنزين', exp: '🧾 مصروف آخر', pers: '💸 سحب شخصي' };
-const Lplain = { fuel: 'بنزين', exp: 'مصروف آخر', pers: 'سحب شخصي' };
+const legacyLabels = { fuel: 'بنزين', exp: 'مصروف', pers: 'سحب شخصي' };
+const expLabel = t => (t.note && t.note.trim()) ? t.note.trim() : (legacyLabels[t.type] || 'مصروف');
 const open = t => t.type == 'order' && t.debt && !t.settled;
 const eff = t => t.type == 'order' ? (open(t) ? 0 : t.fee) : -t.amt;
 const bal = () => S.tx.reduce((a, t) => a + eff(t), n(S.oU));
 
-function build() {
-  const O = n(S.oU);
-  const ords = S.tx.filter(t => t.type == 'order' && !(open(t) && t.inc === false));
+function buildReport(txList = S.tx, fixedBox = n(S.oU), dateStr = new Date().toLocaleDateString('en-GB')) {
+  const ords = txList.filter(t => t.type == 'order' && !(open(t) && t.inc === false));
   const T = ords.reduce((a, t) => a + t.fee, 0);
   const ded = [];
   ords.filter(open).forEach(t => ded.push(['دين ' + t.name, t.fee]));
-  S.tx.filter(t => t.type != 'order').forEach(t => ded.push([Lplain[t.type] + (t.note ? ' (' + t.note + ')' : ''), t.amt]));
+  txList.filter(t => t.type != 'order').forEach(t => ded.push([expLabel(t), t.amt]));
   const D = ded.reduce((a, d) => a + d[1], 0);
   const net = T - D;
 
-  let s = `📋 جرد يوم ${new Date().toLocaleDateString('en-GB')}\n\nالطلبيات:\n`;
+  let s = `📋 جرد يوم ${dateStr}\n\nالطلبيات:\n`;
   s += ords.length ? ords.map((t, i) => `${i + 1}. ${t.name || 'طلبية'}: دلفري ${Mtxt(t.fee)}${open(t) ? ' (دين)' : ''}`).join('\n') : '—';
-  s += `\n\nمجموع الدلفري: ${Mtxt(T)}\n\nالخصومات:\n`;
+  s += `\n\nمجموع الدلفري: ${Mtxt(T)}\n\nالمصروفات والخصومات:\n`;
   s += ded.length ? ded.map(d => `- ${d[0]}: ${Mtxt(d[1])}`).join('\n') : '—';
-  s += `\nمجموع الخصومات: ${Mtxt(D)}\n\nالصافي (الدلفري − الخصومات): ${Mtxt(net)}\nالصندوق الثابت (يبقى معي): ${Mtxt(O)}\n✅ الزيادة المسلّمة للمالك: ${Mtxt(net)}`;
+  s += `\nمجموع الخصومات: ${Mtxt(D)}\n\nالصافي (الدلفري − الخصومات): ${Mtxt(net)}\nالصندوق الثابت (يبقى معي): ${Mtxt(fixedBox)}\n✅ الزيادة المسلّمة للمالك: ${Mtxt(net)}`;
   return s;
 }
 
 function row(t) {
-  const nm = t.type == 'order' ? esc(t.name || 'طلبية') : esc(t.note || Lplain[t.type]);
+  const nm = t.type == 'order' ? esc(t.name || 'طلبية') : esc(expLabel(t));
   const a = t.type == 'order' ? t.fee : t.amt;
   const c = t.type == 'order' ? (open(t) ? 'var(--amb)' : 'var(--g)') : 'var(--r)';
   let x = '';
@@ -905,36 +949,48 @@ function render() {
       </div>
     </div>`;
 
-  const g = ty => T.filter(t => t.type == ty);
+  const paidOrders = T.filter(t => t.type == 'order' && !open(t));
+  const openDebts = T.filter(open);
+  const allExpenses = T.filter(t => t.type != 'order');
+
   $('list').innerHTML = T.length
-    ? grp('💵 الدلفري', T.filter(t => t.type == 'order' && !open(t)), 'var(--g)') +
-      grp('⏳ ديون غير محصّلة', T.filter(open), 'var(--amb)') +
-      grp('⛽ بنزين', g('fuel'), 'var(--r)') +
-      grp('🧾 مصاريف أخرى', g('exp'), 'var(--r)') +
-      grp('💸 سحب شخصي', g('pers'), 'var(--r)')
+    ? grp('💵 الدلفري', paidOrders, 'var(--g)') +
+      grp('⏳ ديون غير محصّلة', openDebts, 'var(--amb)') +
+      grp('🧾 المصروفات', allExpenses, 'var(--r)')
     : `<div class="empty-state">
         <div class="empty-icon">💵</div>
         <div style="font-weight:700;color:var(--tx);margin-bottom:4px">لا توجد عمليات مسجلة اليوم</div>
         <div>اضغط <b>+ طلبية</b> لإضافة توصيلة، أو <b>− مصروف</b> لتسجيل نفقة</div>
       </div>`;
 
-  const a = new Set(S.names || []);
-  T.forEach(t => t.name && a.add(t.name));
-  $('nl').innerHTML = [...a].map(x => `<option value="${esc(x)}">`).join('');
+  const orderNames = new Set(S.names || []);
+  T.forEach(t => t.type == 'order' && t.name && orderNames.add(t.name));
+  $('nl').innerHTML = [...orderNames].map(x => `<option value="${esc(x)}">`).join('');
+
+  const expSuggestions = new Set(S.expNotes || ['بنزين', 'سحب شخصي', 'طعام / شراب', 'صيانة']);
+  T.forEach(t => t.type != 'order' && t.note && expSuggestions.add(t.note));
+  $('el').innerHTML = [...expSuggestions].map(x => `<option value="${esc(x)}">`).join('');
 
   $('sur').innerHTML = `
     <div class="lb" style="margin-top:0">الزيادة المطلوب تسليمها للمالك</div>
     <div style="font-size:32px;font-weight:800" class="${sp < 0 ? 'neg' : 'pos'}">${M(sp)}</div>`;
 
-  $('pre').textContent = build();
   diff();
 
   $('hist').innerHTML = S.hist.length
-    ? S.hist.slice().reverse().map(d => `<div class="k">
-        <span>📅 ${d.date} <span class="m">(${d.n} عملية)</span></span>
-        <span class="pos" style="font-weight:800">${M(d.sur != null ? d.sur : d.end)}</span>
-      </div>`).join('')
-    : '<div class="lb">لا توجد أيام سابقة محفوظة</div>';
+    ? S.hist.slice().reverse().map((d, revIdx) => {
+        const realIdx = S.hist.length - 1 - revIdx;
+        const netVal = d.sur != null ? d.sur : d.end;
+        const hasDetails = Array.isArray(d.tx) && d.tx.length > 0;
+        return `<div class="k" onclick="openArchive(${realIdx})">
+          <div>
+            <div>📅 ${esc(d.date)} <span class="m">(${d.n} عملية)</span></div>
+            <span class="arch-badge">${hasDetails ? 'عرض الطلبيات والمصروفات ‹' : 'عرض الملخص ‹'}</span>
+          </div>
+          <span class="${netVal < 0 ? 'neg' : 'pos'}" style="font-weight:800;font-size:16px">${M(netVal)}</span>
+        </div>`;
+      }).join('')
+    : '<div class="lb">لا توجد أيام مؤرشفة بعد</div>';
 }
 
 function diff() {
@@ -969,17 +1025,11 @@ const inc = (id, v) => {
 };
 
 /* Entry Screen */
-let mode, cat, a = '';
+let mode, a = '';
 function amt() { $('amt').textContent = a || '0'; }
-function cats() {
-  $('cats').innerHTML = Object.keys(L).map(k =>
-    `<button class="chip ${k == cat ? 'on' : ''}" onclick="cat='${k}';cats()">${L[k]}</button>`
-  ).join('');
-}
 
 function openE(m) {
   mode = m;
-  cat = 'fuel';
   a = '';
   amt();
   $('debt').checked = false;
@@ -988,13 +1038,10 @@ function openE(m) {
   $('et').textContent = p ? '➕ طلبية جديدة' : '➖ مصروف جديد';
   $('dispBox').classList.toggle('exp-mode', !p);
   $('debtL').classList.toggle('h', !p);
-  $('cats').classList.toggle('h', p);
   $('save').className = 'save' + (p ? '' : ' r');
   $('save').textContent = p ? 'حفظ الطلبية ✓' : 'حفظ المصروف ✓';
-  $('note').placeholder = p ? 'اسم الطلبية أو الزبون...' : 'ملاحظة (اختياري)...';
-  if (p) $('note').setAttribute('list', 'nl');
-  else $('note').removeAttribute('list');
-  cats();
+  $('note').placeholder = p ? 'اسم الطلبية أو الزبون...' : 'نوع المصروف أو ملاحظة (مثلاً: بنزين، سحب شخصي)...';
+  $('note').setAttribute('list', p ? 'nl' : 'el');
   $('ent').classList.remove('h');
 }
 
@@ -1029,7 +1076,11 @@ $('save').onclick = () => {
     S.names = S.names || [];
     if (!S.names.includes(nm)) S.names.push(nm);
   } else {
-    Object.assign(t, { type: cat, amt: v, note: nm });
+    Object.assign(t, { type: 'exp', amt: v, note: nm || 'مصروف' });
+    if (nm) {
+      S.expNotes = S.expNotes || [];
+      if (!S.expNotes.includes(nm)) S.expNotes.push(nm);
+    }
   }
   S.tx.push(t);
   save();
@@ -1037,7 +1088,7 @@ $('save').onclick = () => {
   render();
 };
 
-/* Report & Actions */
+/* Report & Closing Actions */
 $('rb').onclick = () => {
   $('oU').value = S.oU;
   $('ph').value = S.ph;
@@ -1059,32 +1110,167 @@ function num() {
 $('wa').onclick = () => {
   const d = num();
   if (d.length < 8) { alert('أدخل رقم واتساب المالك أولاً'); return; }
-  const url = 'https://wa.me/' + d + '?text=' + encodeURIComponent(build());
+  const url = 'https://wa.me/' + d + '?text=' + encodeURIComponent(buildReport());
   const w = window.open(url, '_blank');
   if (!w) window.location.href = url;
 };
 
 $('copy').onclick = async () => {
   try {
-    await navigator.clipboard.writeText(build());
+    await navigator.clipboard.writeText(buildReport());
     alert('تم نسخ التقرير بنجاح ✓');
   } catch (e) {
-    prompt('انسخ التقرير:', build());
+    prompt('انسخ التقرير:', buildReport());
   }
 };
 
 $('close').onclick = () => {
-  if (!confirm('هل تريد إقفال اليوم؟ سيتم حفظ الصافي في سجل الأيام السابقة وبدء يوم جديد.')) return;
+  if (!S.tx.length) {
+    alert('لا توجد عمليات مسجلة اليوم لإقفالها.');
+    return;
+  }
+  if (!confirm('هل تريد إقفال اليوم؟ سيتم أرشفة جميع الطلبيات والمصروفات في سجل الأيام السابقة وبدء يوم جديد.')) return;
+
+  const ords = S.tx.filter(t => t.type == 'order');
+  const exps = S.tx.filter(t => t.type != 'order');
+  const ordersTotal = ords.reduce((sum, t) => sum + t.fee, 0);
+  const expTotal = exps.reduce((sum, t) => sum + t.amt, 0);
+
   S.hist.push({
+    id: Date.now(),
     date: new Date().toLocaleDateString('en-GB'),
+    closedAt: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
     n: S.tx.length,
-    sur: bal() - n(S.oU)
+    oU: n(S.oU),
+    ordersTotal,
+    expTotal,
+    sur: bal() - n(S.oU),
+    tx: JSON.parse(JSON.stringify(S.tx))
   });
+
   S.tx = [];
   save();
   $('cnt').value = '';
-  $('rep').classList.add('h');
   render();
+  alert('تم إقفال اليوم وأرشفة العمليات بنجاح ✓');
+};
+
+/* Archive Review Modal */
+let activeArchIdx = -1;
+
+function openArchive(idx) {
+  const d = S.hist[idx];
+  if (!d) return;
+  activeArchIdx = idx;
+  $('archTitle').textContent = `أرشيف ${d.date}`;
+
+  const netVal = d.sur != null ? d.sur : d.end;
+  const txList = Array.isArray(d.tx) ? d.tx : [];
+  const ords = txList.filter(t => t.type == 'order');
+  const exps = txList.filter(t => t.type != 'order');
+  const ordSum = d.ordersTotal != null ? d.ordersTotal : ords.reduce((a, t) => a + t.fee, 0);
+  const expSum = d.expTotal != null ? d.expTotal : exps.reduce((a, t) => a + t.amt, 0);
+
+  let html = `
+    <div class="arch-grid">
+      <div class="arch-stat">
+        <div class="arch-stat-k">الصافي المسلّم للمالك</div>
+        <div class="arch-stat-v ${netVal < 0 ? 'neg' : 'pos'}">${M(netVal)}</div>
+      </div>
+      <div class="arch-stat">
+        <div class="arch-stat-k">الصندوق الثابت</div>
+        <div class="arch-stat-v">${M(d.oU != null ? d.oU : n(S.oU))}</div>
+      </div>
+      <div class="arch-stat">
+        <div class="arch-stat-k">مجموع الطلبيات (${ords.length})</div>
+        <div class="arch-stat-v pos">${M(ordSum)}</div>
+      </div>
+      <div class="arch-stat">
+        <div class="arch-stat-k">مجموع المصروفات (${exps.length})</div>
+        <div class="arch-stat-v neg">${M(expSum)}</div>
+      </div>
+    </div>`;
+
+  if (txList.length) {
+    if (ords.length) {
+      html += `<div class="grp-card">
+        <div class="gh">
+          <span>💵 الطلبيات</span>
+          <span class="c" style="background:var(--g)">${ords.length}</span>
+          <span class="t" style="color:var(--g)">${M(ordSum)}</span>
+        </div>
+        ${ords.map(t => {
+          const isDebt = t.debt && !t.settled;
+          return `<div class="it">
+            <span class="dot" style="background:${isDebt ? 'var(--amb)' : 'var(--g)'}"></span>
+            <div class="n">${esc(t.name || 'طلبية')} ${isDebt ? '<span class="debt-tag">دين غير محصّل</span>' : ''} <span class="m">· ${esc(t.time || '')}</span></div>
+            <span class="it-amt" style="color:${isDebt ? 'var(--amb)' : 'var(--g)'}">${M(t.fee)}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+
+    if (exps.length) {
+      html += `<div class="grp-card">
+        <div class="gh">
+          <span>🧾 المصروفات</span>
+          <span class="c" style="background:var(--r)">${exps.length}</span>
+          <span class="t" style="color:var(--r)">${M(expSum)}</span>
+        </div>
+        ${exps.map(t => `<div class="it">
+          <span class="dot" style="background:var(--r)"></span>
+          <div class="n">${esc(expLabel(t))} <span class="m">· ${esc(t.time || '')}</span></div>
+          <span class="it-amt" style="color:var(--r)">${M(t.amt)}</span>
+        </div>`).join('')}
+      </div>`;
+    }
+
+    html += `
+      <button class="save w" style="margin-top:14px" onclick="shareArchived()">مشاركة جرد هذا اليوم عبر واتساب 📲</button>
+      <button class="save o" onclick="copyArchived()">نسخ جرد هذا اليوم 📋</button>
+    `;
+  } else {
+    html += `<div class="empty-state" style="margin-top:16px">
+      <div>هذا اليوم تم إقفاله في الإصدار السابق قبل تفعيل الأرشفة التفصيلية للعمليات.</div>
+    </div>`;
+  }
+
+  $('archBody').innerHTML = html;
+  $('archModal').classList.remove('h');
+}
+
+function shareArchived() {
+  const d = S.hist[activeArchIdx];
+  if (!d || !Array.isArray(d.tx)) return;
+  const numStr = num();
+  if (numStr.length < 8) { alert('أدخل رقم واتساب المالك في شاشة الجرد أولاً'); return; }
+  const txt = buildReport(d.tx, d.oU != null ? d.oU : n(S.oU), d.date);
+  const url = 'https://wa.me/' + numStr + '?text=' + encodeURIComponent(txt);
+  const w = window.open(url, '_blank');
+  if (!w) window.location.href = url;
+}
+
+async function copyArchived() {
+  const d = S.hist[activeArchIdx];
+  if (!d || !Array.isArray(d.tx)) return;
+  const txt = buildReport(d.tx, d.oU != null ? d.oU : n(S.oU), d.date);
+  try {
+    await navigator.clipboard.writeText(txt);
+    alert('تم نسخ جرد اليوم المؤرشف بنجاح ✓');
+  } catch (e) {
+    prompt('انسخ الجرد:', txt);
+  }
+}
+
+$('aback').onclick = () => $('archModal').classList.add('h');
+$('archDelBtn').onclick = () => {
+  if (activeArchIdx < 0) return;
+  if (confirm('هل تريد حذف سجل هذا اليوم من الأرشيف نهائياً؟')) {
+    S.hist.splice(activeArchIdx, 1);
+    save();
+    $('archModal').classList.add('h');
+    render();
+  }
 };
 
 render();
