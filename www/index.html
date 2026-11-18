@@ -187,14 +187,19 @@ header {
   text-align: center;
 }
 
-.stat-pill.has-debt {
-  background: rgba(251, 191, 36, 0.26);
-  border-color: rgba(251, 191, 36, 0.45);
+.stat-pill.clickable {
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.stat-pill.clickable:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.26);
 }
 
 .stat-k {
   font-size: 11.5px;
-  opacity: 0.9;
+  opacity: 0.92;
   display: block;
 }
 
@@ -204,7 +209,7 @@ header {
   margin-top: 1px;
 }
 
-/* Main List */
+/* Main List & Collapsible Cards */
 #list {
   flex: 1;
   overflow-y: auto;
@@ -216,18 +221,49 @@ header {
   border: 1px solid var(--bd);
   border-radius: 16px;
   margin-top: 12px;
-  padding: 4px 14px 6px;
+  padding: 0 14px;
   box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .gh {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 0 8px;
+  padding: 13px 0;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 14.5px;
+  cursor: pointer;
+  user-select: none;
   border-bottom: 1px solid var(--bd);
+  transition: opacity 0.15s ease;
+}
+
+.gh.folded {
+  border-bottom: 0;
+}
+
+.gh:active {
+  opacity: 0.75;
+}
+
+.chev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--card-2);
+  border: 1px solid var(--bd);
+  color: var(--mut);
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  transform: rotate(90deg);
+}
+
+.chev.open {
+  transform: rotate(0deg);
 }
 
 .gh .c {
@@ -240,7 +276,11 @@ header {
 
 .gh .t {
   margin-inline-start: auto;
-  font-size: 14.5px;
+  font-size: 15px;
+}
+
+.grp-body {
+  padding-bottom: 4px;
 }
 
 .it {
@@ -299,39 +339,6 @@ header {
   background: var(--r-bg);
   color: var(--r);
   border-color: var(--r);
-}
-
-.debt-actions {
-  margin-top: 6px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.sm {
-  background: var(--g-bg);
-  color: var(--g);
-  border: 1px solid var(--g);
-  border-radius: 8px;
-  padding: 4px 10px;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.sm:active {
-  transform: scale(0.96);
-}
-
-.chk-lbl {
-  font-size: 12px;
-  color: var(--mut);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
 }
 
 .empty-state {
@@ -432,6 +439,7 @@ footer {
   position: sticky;
   top: 0;
   z-index: 3;
+  flex: none;
 }
 
 .top button {
@@ -460,6 +468,7 @@ footer {
 
 .pad {
   padding: 14px 16px;
+  flex: none;
 }
 
 .disp {
@@ -467,7 +476,7 @@ footer {
   border: 2px solid var(--g);
   color: var(--g);
   border-radius: 16px;
-  padding: 12px 16px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -481,7 +490,7 @@ footer {
 }
 
 .disp span {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   opacity: 0.85;
 }
@@ -489,7 +498,7 @@ footer {
 .disp b {
   flex: 1;
   text-align: center;
-  font-size: 38px;
+  font-size: 34px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
@@ -503,12 +512,18 @@ footer {
   padding: 4px 8px;
 }
 
+.input-wrap {
+  position: relative;
+  margin-top: 12px;
+}
+
 input[type="text"],
 input[type="number"],
 input[type="tel"],
 input:not([type]) {
   width: 100%;
   padding: 12px 14px;
+  padding-inline-end: 38px;
   border: 1.5px solid var(--bd);
   border-radius: 12px;
   background: var(--card);
@@ -523,25 +538,90 @@ input:focus {
   border-color: var(--g);
 }
 
-input[type="checkbox"] {
-  width: 17px;
-  height: 17px;
-  accent-color: var(--g);
-  margin: 0;
-}
-
-.debt-card {
+.clr-inp {
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--bd);
+  color: var(--mut);
+  font-size: 13px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-  padding: 12px 14px;
-  background: var(--card);
-  border: 1.5px solid var(--bd);
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
+  justify-content: center;
   cursor: pointer;
+}
+
+/* Compact Horizontal Filter Strip (Never covers keyboard) */
+.ac-wrap {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ac-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mut);
+  flex: none;
+}
+
+.ac-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px 0;
+  flex: 1;
+  scrollbar-width: none;
+}
+
+.ac-list::-webkit-scrollbar {
+  display: none;
+}
+
+.ac-chip {
+  flex: none;
+  background: var(--card);
+  color: var(--tx);
+  border: 1.5px solid var(--bd);
+  border-radius: 99px;
+  padding: 6px 13px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: transform 0.1s ease, border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.ac-chip mark {
+  background: transparent;
+  color: var(--g);
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ac-chip.exp-chip mark {
+  color: var(--r);
+}
+
+.ac-chip:active {
+  transform: scale(0.95);
+  border-color: var(--g);
+  background: var(--g-bg);
+}
+
+.ac-chip.exp-chip:active {
+  border-color: var(--r);
+  background: var(--r-bg);
 }
 
 /* Numeric Keypad */
@@ -550,12 +630,13 @@ input[type="checkbox"] {
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-top: auto;
-  padding: 10px 16px;
+  padding: 8px 16px;
   direction: ltr;
+  flex: none;
 }
 
 #kp button {
-  padding: 15px 0;
+  padding: 14px 0;
   font-size: 22px;
   font-weight: 700;
   border: 1px solid var(--bd);
@@ -584,6 +665,7 @@ input[type="checkbox"] {
   background: var(--hd-grad);
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+  flex: none;
 }
 
 .save:active {
@@ -595,38 +677,50 @@ input[type="checkbox"] {
   box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25);
 }
 
-.save.w {
-  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+.save.d {
+  background: var(--card);
+  color: var(--r);
+  border: 1.5px solid var(--r);
+  box-shadow: none;
   margin: 12px 0 0;
   width: 100%;
 }
 
-.save.o {
-  background: var(--card);
-  color: var(--g);
-  border: 1.5px solid var(--g);
-  box-shadow: none;
-  margin: 10px 0 0;
-  width: 100%;
-}
-
-.save.d {
-  background: var(--card);
-  color: var(--r);
-  border: 1.5px solid var(--bd);
-  box-shadow: none;
-  margin: 10px 0 0;
-  width: 100%;
-}
-
-/* Report Screen */
+/* Box Control & Archive Screen */
 .rep-card {
   background: var(--card);
   border: 1px solid var(--bd);
   border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
   box-shadow: var(--shadow);
+}
+
+.box-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.step-btn {
+  width: 44px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1.5px solid var(--bd);
+  background: var(--card-2);
+  color: var(--tx);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  flex: none;
+}
+
+.step-btn:active {
+  background: var(--g-bg);
+  border-color: var(--g);
+  color: var(--g);
 }
 
 .lb {
@@ -636,27 +730,33 @@ input[type="checkbox"] {
   margin: 10px 0 5px;
 }
 
-.diff-box {
-  margin-top: 10px;
-  padding: 9px 12px;
-  border-radius: 10px;
-  font-size: 13.5px;
-  font-weight: 700;
+.box-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--bd);
 }
 
-.diff-box.ok {
-  background: var(--g-bg);
-  color: var(--g);
+.box-mini {
+  background: var(--card-2);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 8px 10px;
+  text-align: center;
 }
 
-.diff-box.bad {
-  background: var(--r-bg);
-  color: var(--r);
+.box-mini-k {
+  font-size: 11.5px;
+  color: var(--mut);
+  font-weight: 600;
 }
 
-.diff-box.warn {
-  background: var(--amb-bg);
-  color: var(--amb);
+.box-mini-v {
+  font-size: 16px;
+  font-weight: 800;
+  margin-top: 2px;
 }
 
 /* Archive List Items */
@@ -720,20 +820,8 @@ input[type="checkbox"] {
   margin-top: 2px;
 }
 
-.debt-tag {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 7px;
-  border-radius: 6px;
-  background: var(--amb-bg);
-  color: var(--amb);
-  margin-inline-start: 4px;
-}
-
 .pos { color: var(--g); }
 .neg { color: var(--r); }
-.warn { color: var(--amb); }
 </style>
 </head>
 <body>
@@ -745,7 +833,7 @@ input[type="checkbox"] {
     </div>
     <div class="hd-actions">
       <button class="hd-btn" id="themeBtn" aria-label="تبديل المظهر">🌙 مظلم</button>
-      <button class="hd-btn" id="rb">📋 الجرد</button>
+      <button class="hd-btn" id="rb">🗄️ الأرشيف</button>
     </div>
   </header>
 
@@ -770,48 +858,38 @@ input[type="checkbox"] {
       <b id="amt">0</b>
       <button id="bk" aria-label="مسح">⌫</button>
     </div>
-    <input id="note" autocomplete="off" style="margin-top:12px">
-    <datalist id="nl"></datalist>
-    <datalist id="el"></datalist>
-    <label id="debtL" class="debt-card">
-      <input type="checkbox" id="debt">
-      <span>⏳ دين (الزبون لم يدفع الآن)</span>
-    </label>
+    <div class="input-wrap">
+      <input id="note" type="text" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button type="button" id="clrNote" class="clr-inp h" aria-label="مسح النص">✕</button>
+    </div>
+    <div id="acWrap" class="ac-wrap h">
+      <span class="ac-tag">سابقاً:</span>
+      <div id="acList" class="ac-list"></div>
+    </div>
   </div>
   <div id="kp"></div>
   <button class="save" id="save">حفظ العملية</button>
 </div>
 
-<!-- Report & Closing Modal -->
+<!-- Archive & Box Control Modal -->
 <div id="rep" class="ov h">
   <div class="top">
     <button id="rback" aria-label="رجوع">→</button>
-    <span>الجرد وإقفال اليوم</span>
+    <span>الأرشيف والتحكم بالصندوق</span>
   </div>
   <div class="pad">
     <div class="rep-card">
-      <div id="sur"></div>
-      <div style="display:flex;gap:10px;margin-top:10px">
-        <div style="flex:1">
-          <div class="lb" style="margin-top:0">الصندوق الثابت $</div>
-          <input id="oU" type="number" inputmode="decimal">
-        </div>
-        <div style="flex:1">
-          <div class="lb" style="margin-top:0">عدّيت فعلياً $</div>
-          <input id="cnt" type="number" inputmode="decimal" placeholder="0.00">
-        </div>
+      <div class="lb" style="margin-top:0">التحكم بالصندوق الثابت ($)</div>
+      <div class="box-ctrl-row">
+        <button type="button" class="step-btn" onclick="stepBox(-10)">-10</button>
+        <input id="oU" type="number" inputmode="decimal" style="text-align:center;font-weight:800;font-size:17px;padding-inline-end:14px">
+        <button type="button" class="step-btn" onclick="stepBox(10)">+10</button>
       </div>
-      <div id="diff"></div>
+      <div class="box-summary-grid" id="boxSum"></div>
+      <button class="save d" id="close">🔒 إقفال اليوم وأرشفة العمليات</button>
     </div>
 
-    <div class="lb">رقم واتساب المالك (مع رمز الدولة)</div>
-    <input id="ph" type="tel" inputmode="tel" placeholder="9617xxxxxxx">
-
-    <button class="save w" id="wa">مشاركة عبر واتساب 📲</button>
-    <button class="save o" id="copy">نسخ التقرير 📋</button>
-    <button class="save d" id="close">إقفال اليوم وأرشفة العمليات 🔒</button>
-
-    <div class="lb" style="margin-top:20px">أرشيف الأيام السابقة (اضغط للمراجعة)</div>
+    <div class="lb" style="margin-top:16px">أرشيف الأيام السابقة (اضغط للمراجعة)</div>
     <div id="hist"></div>
   </div>
 </div>
@@ -844,7 +922,6 @@ const $ = i => document.getElementById(i);
 const n = v => parseFloat(v) || 0;
 const f = (v, d = 2) => v.toLocaleString('en-US', { maximumFractionDigits: d });
 const M = v => `<span class="num">${f(v)}$</span>`;
-const Mtxt = v => f(v) + '$';
 const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 /* Theme Management */
@@ -873,66 +950,74 @@ $('themeBtn').onclick = () => {
   applyTheme(currentTheme);
 };
 
-/* Core Accounting Logic */
+/* Core Accounting Logic (Debts completely removed) */
 const legacyLabels = { fuel: 'بنزين', exp: 'مصروف', pers: 'سحب شخصي' };
 const expLabel = t => (t.note && t.note.trim()) ? t.note.trim() : (legacyLabels[t.type] || 'مصروف');
-const open = t => t.type == 'order' && t.debt && !t.settled;
-const eff = t => t.type == 'order' ? (open(t) ? 0 : t.fee) : -t.amt;
+const eff = t => t.type == 'order' ? n(t.fee) : -n(t.amt);
 const bal = () => S.tx.reduce((a, t) => a + eff(t), n(S.oU));
 
-function buildReport(txList = S.tx, fixedBox = n(S.oU), dateStr = new Date().toLocaleDateString('en-GB')) {
-  const ords = txList.filter(t => t.type == 'order' && !(open(t) && t.inc === false));
-  const T = ords.reduce((a, t) => a + t.fee, 0);
-  const ded = [];
-  ords.filter(open).forEach(t => ded.push(['دين ' + t.name, t.fee]));
-  txList.filter(t => t.type != 'order').forEach(t => ded.push([expLabel(t), t.amt]));
-  const D = ded.reduce((a, d) => a + d[1], 0);
-  const net = T - D;
+/* Collapsible Windows State (Folded by default, opened on user tap) */
+let folded = { orders: true, exps: true };
 
-  let s = `📋 جرد يوم ${dateStr}\n\nالطلبيات:\n`;
-  s += ords.length ? ords.map((t, i) => `${i + 1}. ${t.name || 'طلبية'}: دلفري ${Mtxt(t.fee)}${open(t) ? ' (دين)' : ''}`).join('\n') : '—';
-  s += `\n\nمجموع الدلفري: ${Mtxt(T)}\n\nالمصروفات والخصومات:\n`;
-  s += ded.length ? ded.map(d => `- ${d[0]}: ${Mtxt(d[1])}`).join('\n') : '—';
-  s += `\nمجموع الخصومات: ${Mtxt(D)}\n\nالصافي (الدلفري − الخصومات): ${Mtxt(net)}\nالصندوق الثابت (يبقى معي): ${Mtxt(fixedBox)}\n✅ الزيادة المسلّمة للمالك: ${Mtxt(net)}`;
-  return s;
+function toggleGrp(key) {
+  folded[key] = !folded[key];
+  render();
+}
+
+function quickEditBox() {
+  const cur = n(S.oU);
+  const val = prompt('أدخل قيمة الصندوق الثابت ($):', cur);
+  if (val === null) return;
+  const parsed = parseFloat(val);
+  if (isNaN(parsed) || parsed < 0) {
+    alert('أدخل رقماً صحيحاً');
+    return;
+  }
+  S.oU = parsed;
+  save();
+  render();
+}
+
+function stepBox(delta) {
+  const next = Math.max(0, n(S.oU) + delta);
+  S.oU = next;
+  $('oU').value = next;
+  save();
+  render();
 }
 
 function row(t) {
   const nm = t.type == 'order' ? esc(t.name || 'طلبية') : esc(expLabel(t));
-  const a = t.type == 'order' ? t.fee : t.amt;
-  const c = t.type == 'order' ? (open(t) ? 'var(--amb)' : 'var(--g)') : 'var(--r)';
-  let x = '';
-  if (open(t)) {
-    x = `<div class="debt-actions">
-      <button class="sm" onclick="settle(${t.id})">تم التسديد ✓</button>
-      <label class="chk-lbl"><input type="checkbox" ${t.inc === false ? '' : 'checked'} onchange="inc(${t.id},this.checked)"> ضمن الجرد</label>
-    </div>`;
-  }
+  const a = t.type == 'order' ? n(t.fee) : n(t.amt);
+  const c = t.type == 'order' ? 'var(--g)' : 'var(--r)';
   return `<div class="it">
     <span class="dot" style="background:${c}"></span>
-    <div class="n">${nm} <span class="m">· ${t.time}</span>${x}</div>
+    <div class="n">${nm} <span class="m">· ${esc(t.time || '')}</span></div>
     <span class="it-amt" style="color:${c}">${M(a)}</span>
     <button class="x" onclick="del(${t.id})" aria-label="حذف">✕</button>
   </div>`;
 }
 
-function grp(title, arr, col) {
+function grp(key, title, arr, col) {
   if (!arr.length) return '';
-  const s = arr.reduce((a, t) => a + (t.type == 'order' ? t.fee : t.amt), 0);
+  const s = arr.reduce((a, t) => a + (t.type == 'order' ? n(t.fee) : n(t.amt)), 0);
+  const isFolded = !!folded[key];
   return `<div class="grp-card">
-    <div class="gh">
+    <div class="gh ${isFolded ? 'folded' : ''}" onclick="toggleGrp('${key}')">
+      <span class="chev ${isFolded ? '' : 'open'}">▾</span>
       <span>${title}</span>
       <span class="c" style="background:${col}">${arr.length}</span>
       <span class="t" style="color:${col}">${M(s)}</span>
     </div>
-    ${arr.slice().reverse().map(row).join('')}
+    <div class="grp-body ${isFolded ? 'h' : ''}">
+      ${arr.slice().reverse().map(row).join('')}
+    </div>
   </div>`;
 }
 
 function render() {
   const b = bal();
   const sp = b - n(S.oU);
-  const out = S.tx.filter(open).reduce((a, t) => a + t.fee, 0);
   const T = S.tx;
 
   $('bal').innerHTML = `
@@ -943,39 +1028,35 @@ function render() {
         <span class="stat-k">الزيادة فوق الصندوق</span>
         <div class="stat-v">${M(sp)}</div>
       </div>
-      <div class="stat-pill ${out > 0 ? 'has-debt' : ''}">
-        <span class="stat-k">ديون عند الزبائن</span>
-        <div class="stat-v">${M(out)}</div>
+      <div class="stat-pill clickable" onclick="quickEditBox()" title="تعديل الصندوق الثابت">
+        <span class="stat-k">الصندوق الثابت ✎</span>
+        <div class="stat-v">${M(n(S.oU))}</div>
       </div>
     </div>`;
 
-  const paidOrders = T.filter(t => t.type == 'order' && !open(t));
-  const openDebts = T.filter(open);
+  const allOrders = T.filter(t => t.type == 'order');
   const allExpenses = T.filter(t => t.type != 'order');
 
   $('list').innerHTML = T.length
-    ? grp('💵 الدلفري', paidOrders, 'var(--g)') +
-      grp('⏳ ديون غير محصّلة', openDebts, 'var(--amb)') +
-      grp('🧾 المصروفات', allExpenses, 'var(--r)')
+    ? grp('orders', '💵 الدلفري', allOrders, 'var(--g)') +
+      grp('exps', '🧾 المصروفات', allExpenses, 'var(--r)')
     : `<div class="empty-state">
         <div class="empty-icon">💵</div>
         <div style="font-weight:700;color:var(--tx);margin-bottom:4px">لا توجد عمليات مسجلة اليوم</div>
         <div>اضغط <b>+ طلبية</b> لإضافة توصيلة، أو <b>− مصروف</b> لتسجيل نفقة</div>
       </div>`;
 
-  const orderNames = new Set(S.names || []);
-  T.forEach(t => t.type == 'order' && t.name && orderNames.add(t.name));
-  $('nl').innerHTML = [...orderNames].map(x => `<option value="${esc(x)}">`).join('');
-
-  const expSuggestions = new Set(S.expNotes || ['بنزين', 'سحب شخصي', 'طعام / شراب', 'صيانة']);
-  T.forEach(t => t.type != 'order' && t.note && expSuggestions.add(t.note));
-  $('el').innerHTML = [...expSuggestions].map(x => `<option value="${esc(x)}">`).join('');
-
-  $('sur').innerHTML = `
-    <div class="lb" style="margin-top:0">الزيادة المطلوب تسليمها للمالك</div>
-    <div style="font-size:32px;font-weight:800" class="${sp < 0 ? 'neg' : 'pos'}">${M(sp)}</div>`;
-
-  diff();
+  if ($('boxSum')) {
+    $('boxSum').innerHTML = `
+      <div class="box-mini">
+        <div class="box-mini-k">صافي اليوم (الزيادة)</div>
+        <div class="box-mini-v ${sp < 0 ? 'neg' : 'pos'}">${M(sp)}</div>
+      </div>
+      <div class="box-mini">
+        <div class="box-mini-k">إجمالي الصندوق الحالي</div>
+        <div class="box-mini-v pos">${M(b)}</div>
+      </div>`;
+  }
 
   $('hist').innerHTML = S.hist.length
     ? S.hist.slice().reverse().map((d, revIdx) => {
@@ -993,19 +1074,6 @@ function render() {
     : '<div class="lb">لا توجد أيام مؤرشفة بعد</div>';
 }
 
-function diff() {
-  if ($('cnt').value === '') {
-    $('diff').innerHTML = '';
-    return;
-  }
-  const d = n($('cnt').value) - bal();
-  if (Math.abs(d) < 0.005) {
-    $('diff').innerHTML = '<div class="diff-box ok">✅ الصندوق مطابق تماماً</div>';
-  } else {
-    $('diff').innerHTML = `<div class="diff-box ${d < 0 ? 'bad' : 'warn'}">${d < 0 ? '⚠️ ناقص' : '⚠️ زائد'} ${M(Math.abs(d))} عن المفروض — راجع العمليات</div>`;
-  }
-}
-
 const del = id => {
   if (confirm('حذف هذه العملية؟')) {
     S.tx = S.tx.filter(t => t.id !== id);
@@ -1013,15 +1081,105 @@ const del = id => {
     render();
   }
 };
-const settle = id => {
-  S.tx.find(t => t.id === id).settled = true;
-  save();
-  render();
-};
-const inc = (id, v) => {
-  S.tx.find(t => t.id === id).inc = v;
-  save();
-  render();
+
+/* Smart Letter-by-Letter Search & Compact Chip Bar (Never covers keyboard) */
+function normAr(str) {
+  return String(str || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[أإآٱ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي')
+    .replace(/[\u064B-\u065F\u0670]/g, '');
+}
+
+function getHistoryPool(isOrder) {
+  const seen = new Set();
+  const list = [];
+  const add = val => {
+    const v = String(val || '').trim();
+    if (!v || seen.has(v)) return;
+    seen.add(v);
+    list.push(v);
+  };
+
+  // 1. Most recent active transactions first
+  for (let i = S.tx.length - 1; i >= 0; i--) {
+    const t = S.tx[i];
+    if (isOrder && t.type == 'order') add(t.name);
+    if (!isOrder && t.type != 'order') add(t.note);
+  }
+  // 2. Saved names/notes
+  const savedArr = isOrder ? (S.names || []) : (S.expNotes || []);
+  for (let i = savedArr.length - 1; i >= 0; i--) add(savedArr[i]);
+  // 3. Archived days items
+  for (let i = S.hist.length - 1; i >= 0; i--) {
+    const txs = S.hist[i].tx || [];
+    for (let j = txs.length - 1; j >= 0; j--) {
+      const t = txs[j];
+      if (isOrder && t.type == 'order') add(t.name);
+      if (!isOrder && t.type != 'order') add(t.note);
+    }
+  }
+  return list;
+}
+
+function updateSuggestions() {
+  const raw = $('note').value;
+  $('clrNote').classList.toggle('h', !raw.length);
+
+  const isOrder = mode == 'plus';
+  const pool = getHistoryPool(isOrder);
+  const q = normAr(raw);
+
+  let matches = [];
+  if (!q) {
+    matches = pool.slice(0, 8);
+  } else {
+    const prefixMatches = [];
+    const containsMatches = [];
+    for (const item of pool) {
+      const ni = normAr(item);
+      if (ni === q) continue;
+      if (ni.startsWith(q)) prefixMatches.push(item);
+      else if (ni.includes(q)) containsMatches.push(item);
+    }
+    matches = [...prefixMatches, ...containsMatches].slice(0, 10);
+  }
+
+  if (!matches.length) {
+    $('acWrap').classList.add('h');
+    $('acList').innerHTML = '';
+    return;
+  }
+
+  const chipClass = isOrder ? 'ac-chip' : 'ac-chip exp-chip';
+  $('acList').innerHTML = matches.map(item => {
+    let labelHtml = esc(item);
+    if (q && normAr(item).startsWith(q)) {
+      const prefixPart = item.trim().slice(0, raw.trim().length);
+      const restPart = item.trim().slice(raw.trim().length);
+      labelHtml = `<mark>${esc(prefixPart)}</mark>${esc(restPart)}`;
+    }
+    const safeVal = esc(item).replace(/'/g, '&#39;');
+    return `<button type="button" class="${chipClass}" onmousedown="event.preventDefault();pickAc('${safeVal}')" onclick="pickAc('${safeVal}')">${labelHtml}</button>`;
+  }).join('');
+
+  $('acWrap').classList.remove('h');
+}
+
+function pickAc(val) {
+  $('note').value = val;
+  updateSuggestions();
+  $('note').focus();
+}
+
+$('note').oninput = updateSuggestions;
+$('note').onfocus = updateSuggestions;
+$('clrNote').onclick = () => {
+  $('note').value = '';
+  updateSuggestions();
+  $('note').focus();
 };
 
 /* Entry Screen */
@@ -1032,16 +1190,14 @@ function openE(m) {
   mode = m;
   a = '';
   amt();
-  $('debt').checked = false;
   $('note').value = '';
   const p = m == 'plus';
   $('et').textContent = p ? '➕ طلبية جديدة' : '➖ مصروف جديد';
   $('dispBox').classList.toggle('exp-mode', !p);
-  $('debtL').classList.toggle('h', !p);
   $('save').className = 'save' + (p ? '' : ' r');
   $('save').textContent = p ? 'حفظ الطلبية ✓' : 'حفظ المصروف ✓';
-  $('note').placeholder = p ? 'اسم الطلبية أو الزبون...' : 'نوع المصروف أو ملاحظة (مثلاً: بنزين، سحب شخصي)...';
-  $('note').setAttribute('list', p ? 'nl' : 'el');
+  $('note').placeholder = p ? 'ابحث أو اكتب اسم الطلبية / الزبون...' : 'ابحث أو اكتب نوع المصروف (بنزين، سحب...)';
+  updateSuggestions();
   $('ent').classList.remove('h');
 }
 
@@ -1072,14 +1228,17 @@ $('save').onclick = () => {
   };
   if (mode == 'plus') {
     if (!nm) { alert('أدخل اسم الطلبية أو الزبون'); return; }
-    Object.assign(t, { type: 'order', name: nm, fee: v, debt: $('debt').checked, inc: true });
+    Object.assign(t, { type: 'order', name: nm, fee: v });
     S.names = S.names || [];
-    if (!S.names.includes(nm)) S.names.push(nm);
+    S.names = S.names.filter(x => x !== nm);
+    S.names.push(nm);
   } else {
-    Object.assign(t, { type: 'exp', amt: v, note: nm || 'مصروف' });
+    const finalNote = nm || 'مصروف';
+    Object.assign(t, { type: 'exp', amt: v, note: finalNote });
     if (nm) {
       S.expNotes = S.expNotes || [];
-      if (!S.expNotes.includes(nm)) S.expNotes.push(nm);
+      S.expNotes = S.expNotes.filter(x => x !== nm);
+      S.expNotes.push(nm);
     }
   }
   S.tx.push(t);
@@ -1088,53 +1247,26 @@ $('save').onclick = () => {
   render();
 };
 
-/* Report & Closing Actions */
+/* Archive & Box Control Actions */
 $('rb').onclick = () => {
   $('oU').value = S.oU;
-  $('ph').value = S.ph;
   render();
   $('rep').classList.remove('h');
 };
 $('rback').onclick = () => $('rep').classList.add('h');
 $('oU').oninput = e => { S.oU = n(e.target.value); save(); render(); };
-$('ph').oninput = e => { S.ph = e.target.value; save(); };
-$('cnt').oninput = diff;
-
-function num() {
-  let d = S.ph.replace(/\D/g, '');
-  if (d.startsWith('00')) d = d.slice(2);
-  else if (d.startsWith('0')) d = '961' + d.slice(1);
-  return d;
-}
-
-$('wa').onclick = () => {
-  const d = num();
-  if (d.length < 8) { alert('أدخل رقم واتساب المالك أولاً'); return; }
-  const url = 'https://wa.me/' + d + '?text=' + encodeURIComponent(buildReport());
-  const w = window.open(url, '_blank');
-  if (!w) window.location.href = url;
-};
-
-$('copy').onclick = async () => {
-  try {
-    await navigator.clipboard.writeText(buildReport());
-    alert('تم نسخ التقرير بنجاح ✓');
-  } catch (e) {
-    prompt('انسخ التقرير:', buildReport());
-  }
-};
 
 $('close').onclick = () => {
   if (!S.tx.length) {
-    alert('لا توجد عمليات مسجلة اليوم لإقفالها.');
+    alert('لا توجد عمليات مسجلة اليوم لأرشفتها.');
     return;
   }
   if (!confirm('هل تريد إقفال اليوم؟ سيتم أرشفة جميع الطلبيات والمصروفات في سجل الأيام السابقة وبدء يوم جديد.')) return;
 
   const ords = S.tx.filter(t => t.type == 'order');
   const exps = S.tx.filter(t => t.type != 'order');
-  const ordersTotal = ords.reduce((sum, t) => sum + t.fee, 0);
-  const expTotal = exps.reduce((sum, t) => sum + t.amt, 0);
+  const ordersTotal = ords.reduce((sum, t) => sum + n(t.fee), 0);
+  const expTotal = exps.reduce((sum, t) => sum + n(t.amt), 0);
 
   S.hist.push({
     id: Date.now(),
@@ -1150,12 +1282,11 @@ $('close').onclick = () => {
 
   S.tx = [];
   save();
-  $('cnt').value = '';
   render();
   alert('تم إقفال اليوم وأرشفة العمليات بنجاح ✓');
 };
 
-/* Archive Review Modal */
+/* Archive Day Review Modal */
 let activeArchIdx = -1;
 
 function openArchive(idx) {
@@ -1168,13 +1299,13 @@ function openArchive(idx) {
   const txList = Array.isArray(d.tx) ? d.tx : [];
   const ords = txList.filter(t => t.type == 'order');
   const exps = txList.filter(t => t.type != 'order');
-  const ordSum = d.ordersTotal != null ? d.ordersTotal : ords.reduce((a, t) => a + t.fee, 0);
-  const expSum = d.expTotal != null ? d.expTotal : exps.reduce((a, t) => a + t.amt, 0);
+  const ordSum = d.ordersTotal != null ? d.ordersTotal : ords.reduce((a, t) => a + n(t.fee), 0);
+  const expSum = d.expTotal != null ? d.expTotal : exps.reduce((a, t) => a + n(t.amt), 0);
 
   let html = `
     <div class="arch-grid">
       <div class="arch-stat">
-        <div class="arch-stat-k">الصافي المسلّم للمالك</div>
+        <div class="arch-stat-k">صافي اليوم (الزيادة)</div>
         <div class="arch-stat-v ${netVal < 0 ? 'neg' : 'pos'}">${M(netVal)}</div>
       </div>
       <div class="arch-stat">
@@ -1194,72 +1325,45 @@ function openArchive(idx) {
   if (txList.length) {
     if (ords.length) {
       html += `<div class="grp-card">
-        <div class="gh">
+        <div class="gh" style="cursor:default">
           <span>💵 الطلبيات</span>
           <span class="c" style="background:var(--g)">${ords.length}</span>
           <span class="t" style="color:var(--g)">${M(ordSum)}</span>
         </div>
-        ${ords.map(t => {
-          const isDebt = t.debt && !t.settled;
-          return `<div class="it">
-            <span class="dot" style="background:${isDebt ? 'var(--amb)' : 'var(--g)'}"></span>
-            <div class="n">${esc(t.name || 'طلبية')} ${isDebt ? '<span class="debt-tag">دين غير محصّل</span>' : ''} <span class="m">· ${esc(t.time || '')}</span></div>
-            <span class="it-amt" style="color:${isDebt ? 'var(--amb)' : 'var(--g)'}">${M(t.fee)}</span>
-          </div>`;
-        }).join('')}
+        <div class="grp-body">
+          ${ords.map(t => `<div class="it">
+            <span class="dot" style="background:var(--g)"></span>
+            <div class="n">${esc(t.name || 'طلبية')} <span class="m">· ${esc(t.time || '')}</span></div>
+            <span class="it-amt" style="color:var(--g)">${M(n(t.fee))}</span>
+          </div>`).join('')}
+        </div>
       </div>`;
     }
 
     if (exps.length) {
       html += `<div class="grp-card">
-        <div class="gh">
+        <div class="gh" style="cursor:default">
           <span>🧾 المصروفات</span>
           <span class="c" style="background:var(--r)">${exps.length}</span>
           <span class="t" style="color:var(--r)">${M(expSum)}</span>
         </div>
-        ${exps.map(t => `<div class="it">
-          <span class="dot" style="background:var(--r)"></span>
-          <div class="n">${esc(expLabel(t))} <span class="m">· ${esc(t.time || '')}</span></div>
-          <span class="it-amt" style="color:var(--r)">${M(t.amt)}</span>
-        </div>`).join('')}
+        <div class="grp-body">
+          ${exps.map(t => `<div class="it">
+            <span class="dot" style="background:var(--r)"></span>
+            <div class="n">${esc(expLabel(t))} <span class="m">· ${esc(t.time || '')}</span></div>
+            <span class="it-amt" style="color:var(--r)">${M(n(t.amt))}</span>
+          </div>`).join('')}
+        </div>
       </div>`;
     }
-
-    html += `
-      <button class="save w" style="margin-top:14px" onclick="shareArchived()">مشاركة جرد هذا اليوم عبر واتساب 📲</button>
-      <button class="save o" onclick="copyArchived()">نسخ جرد هذا اليوم 📋</button>
-    `;
   } else {
     html += `<div class="empty-state" style="margin-top:16px">
-      <div>هذا اليوم تم إقفاله في الإصدار السابق قبل تفعيل الأرشفة التفصيلية للعمليات.</div>
+      <div>هذا اليوم تم إقفاله قبل تفعيل الأرشفة التفصيلية للعمليات.</div>
     </div>`;
   }
 
   $('archBody').innerHTML = html;
   $('archModal').classList.remove('h');
-}
-
-function shareArchived() {
-  const d = S.hist[activeArchIdx];
-  if (!d || !Array.isArray(d.tx)) return;
-  const numStr = num();
-  if (numStr.length < 8) { alert('أدخل رقم واتساب المالك في شاشة الجرد أولاً'); return; }
-  const txt = buildReport(d.tx, d.oU != null ? d.oU : n(S.oU), d.date);
-  const url = 'https://wa.me/' + numStr + '?text=' + encodeURIComponent(txt);
-  const w = window.open(url, '_blank');
-  if (!w) window.location.href = url;
-}
-
-async function copyArchived() {
-  const d = S.hist[activeArchIdx];
-  if (!d || !Array.isArray(d.tx)) return;
-  const txt = buildReport(d.tx, d.oU != null ? d.oU : n(S.oU), d.date);
-  try {
-    await navigator.clipboard.writeText(txt);
-    alert('تم نسخ جرد اليوم المؤرشف بنجاح ✓');
-  } catch (e) {
-    prompt('انسخ الجرد:', txt);
-  }
 }
 
 $('aback').onclick = () => $('archModal').classList.add('h');
