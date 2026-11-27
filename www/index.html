@@ -520,6 +520,7 @@ footer {
 input[type="text"],
 input[type="number"],
 input[type="tel"],
+input[type="date"],
 input:not([type]) {
   width: 100%;
   padding: 12px 14px;
@@ -625,7 +626,7 @@ input:focus {
 }
 
 /* Numeric Keypad */
-#kp {
+#kp, #dkp, #wkp {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
@@ -635,7 +636,7 @@ input:focus {
   flex: none;
 }
 
-#kp button {
+#kp button, #dkp button, #wkp button {
   padding: 14px 0;
   font-size: 22px;
   font-weight: 700;
@@ -648,7 +649,7 @@ input:focus {
   transition: background-color 0.1s ease, transform 0.08s ease;
 }
 
-#kp button:active {
+#kp button:active, #dkp button:active, #wkp button:active {
   background: var(--kp-active);
   transform: scale(0.96);
 }
@@ -822,6 +823,101 @@ input:focus {
 
 .pos { color: var(--g); }
 .neg { color: var(--r); }
+
+/* ===== Debts feature ===== */
+.top span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top .top-act { margin-inline-start: auto; width: auto; padding: 0 12px; font-size: 13px; font-weight: 700; }
+
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px 14px 2px; }
+.tab {
+  border: 1.5px solid var(--bd); background: var(--card); color: var(--mut);
+  border-radius: 12px; padding: 9px 4px; font: inherit; font-weight: 800; font-size: 13.5px; cursor: pointer;
+}
+.tab.on { background: var(--g-bg); color: var(--g); border-color: var(--g); }
+
+#dview, #wview { flex: 1; overflow-y: auto; padding: 8px 14px 16px; }
+.dsum, .dhero {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+  color: #fff; border-radius: 18px; padding: 16px 16px 14px;
+  box-shadow: 0 10px 25px rgba(217, 119, 6, 0.25); margin-top: 4px;
+}
+.dhero { margin-bottom: 12px; }
+.dhero.ok, .dsum.ok { background: var(--hd-grad); box-shadow: var(--shadow-lg); }
+
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 4px; }
+.segb {
+  border: 1.5px solid var(--bd); background: var(--card); color: var(--mut);
+  border-radius: 11px; padding: 8px 4px; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer;
+}
+.segb.on { background: var(--g-bg); color: var(--g); border-color: var(--g); }
+.segb .m2 { font-size: 11.5px; opacity: .8; }
+
+.pc {
+  display: flex; align-items: center; gap: 11px; padding: 12px 13px; margin-top: 9px;
+  background: var(--card); border: 1px solid var(--bd); border-radius: 15px;
+  box-shadow: var(--shadow); cursor: pointer; transition: transform .12s ease, border-color .15s ease;
+}
+.pc:active { transform: scale(0.98); border-color: var(--g); }
+.av {
+  width: 40px; height: 40px; border-radius: 50%; flex: none; display: flex; align-items: center;
+  justify-content: center; font-weight: 800; font-size: 17px; background: var(--amb-bg); color: var(--amb);
+}
+.pc.done .av { background: var(--g-bg); color: var(--g); }
+.pi { flex: 1; min-width: 0; }
+.pn { font-weight: 800; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm { font-size: 12px; color: var(--mut); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pb { text-align: end; flex: none; }
+.pv { font-weight: 800; font-size: 16px; color: var(--amb); }
+.pc.done .pv { color: var(--g); font-size: 13.5px; }
+.ps { font-size: 11.5px; color: var(--mut); }
+
+.act-row { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; margin-bottom: 14px; }
+.act-row.one { grid-template-columns: 1fr; }
+.act-row .act-btn { font-size: 15px; padding: 12px 10px; }
+.info-card { line-height: 1.9; font-size: 14px; }
+.lnk { color: var(--g); font-weight: 700; text-decoration: none; }
+.enote { white-space: normal; margin-top: 2px; }
+.it .n { min-width: 0; }
+
+details.cyc { background: var(--card); border: 1px solid var(--bd); border-radius: 14px; margin-top: 9px; padding: 0 13px; box-shadow: var(--shadow); }
+details.cyc > summary { padding: 12px 0; cursor: pointer; font-weight: 700; font-size: 13.5px; list-style: none; display: flex; gap: 8px; align-items: center; }
+details.cyc > summary::-webkit-details-marker { display: none; }
+details.cyc > summary .t { margin-inline-start: auto; color: var(--g); font-weight: 800; }
+.mini-btn {
+  border: 1.5px solid var(--bd); background: var(--card-2); color: var(--tx); border-radius: 10px;
+  padding: 8px 12px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; margin: 6px 0 10px;
+}
+.chipbtn {
+  border: 1.5px solid var(--g); background: var(--g-bg); color: var(--g); border-radius: 99px;
+  padding: 5px 12px; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer;
+}
+.rem-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-weight: 700; font-size: 14px; }
+.frm { padding: 14px 16px 24px; }
+.frm .lb { margin-top: 12px; }
+.frm .req { color: var(--r); }
+.frm .box { border-top: 1px dashed var(--bd); margin-top: 16px; padding-top: 4px; }
+textarea.bk {
+  width: 100%; min-height: 150px; padding: 12px; border: 1.5px solid var(--bd); border-radius: 12px;
+  background: var(--card); color: var(--tx); font: 12px/1.4 monospace; direction: ltr; margin-top: 8px;
+}
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 96px; z-index: 60;
+  background: var(--tx); color: var(--bg); padding: 10px 18px; border-radius: 99px;
+  font-weight: 700; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.25); max-width: 90%; text-align: center;
+}
+
+/* typing mode: hide the app keypad while the phone keyboard is open */
+.ov.typing #kp, .ov.typing #dkp, .ov.typing #wkp { display: none; }
+.ov.typing .save { margin-top: 14px; }
+.kp-hint { display: none; font-size: 12px; color: var(--mut); text-align: center; margin-top: 10px; }
+.ov.typing .kp-hint { display: block; }
+.disp { cursor: pointer; }
+.whero {
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+  color: #fff; border-radius: 18px; padding: 16px 16px 14px;
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.25); margin-top: 4px;
+}
+.whero.neg-bal { background: linear-gradient(135deg, #be123c 0%, #e11d48 100%); box-shadow: 0 10px 25px rgba(225,29,72,.25); }
 </style>
 </head>
 <body>
@@ -837,10 +933,40 @@ input:focus {
     </div>
   </header>
 
+  <div class="tabs">
+    <button class="tab on" id="tabBox" onclick="setTab('box')">💵 الصندوق</button>
+    <button class="tab" id="tabDebt" onclick="setTab('debts')">📒 الديون</button>
+    <button class="tab" id="tabWallet" onclick="setTab('wallet')">👛 محفظتي</button>
+  </div>
+
   <div id="bal"></div>
   <div id="list"></div>
 
-  <footer>
+  <div id="dview" class="h">
+    <div id="dsum"></div>
+    <div class="input-wrap" style="margin-top:12px">
+      <input id="dsearch" type="text" autocomplete="off" placeholder="🔍 ابحث عن اسم أو رقم...">
+    </div>
+    <div class="seg" id="dseg"></div>
+    <div id="dlist"></div>
+  </div>
+
+  <div id="wview" class="h">
+    <div id="wsum"></div>
+    <div class="seg" id="wseg"></div>
+    <div id="wlist"></div>
+  </div>
+
+  <footer id="fWallet" class="h">
+    <button class="act-btn g" id="wIn">+ إضافة</button>
+    <button class="act-btn r" id="wOut">− دفع</button>
+  </footer>
+
+  <footer id="fDebt" class="h" style="grid-template-columns:1fr">
+    <button class="act-btn g" id="newDebtBtn">+ دين جديد (زبون)</button>
+  </footer>
+
+  <footer id="fBox">
     <button class="act-btn g" id="plus" aria-label="طلبية">+ طلبية</button>
     <button class="act-btn r" id="minus" aria-label="مصروف">− مصروف</button>
   </footer>
@@ -866,6 +992,7 @@ input:focus {
       <span class="ac-tag">سابقاً:</span>
       <div id="acList" class="ac-list"></div>
     </div>
+    <div class="kp-hint">🔢 اضغط على المبلغ للعودة للوحة الأرقام</div>
   </div>
   <div id="kp"></div>
   <button class="save" id="save">حفظ العملية</button>
@@ -889,6 +1016,11 @@ input:focus {
       <button class="save d" id="close">🔒 إقفال اليوم وأرشفة العمليات</button>
     </div>
 
+    <div class="rep-card">
+      <div class="lb" style="margin-top:0">النسخ الاحتياطي (الصندوق والديون)</div>
+      <button class="save d" id="bkOpen" style="margin-top:6px;color:var(--g);border-color:var(--g)">💾 نسخ احتياطي / استعادة</button>
+    </div>
+
     <div class="lb" style="margin-top:16px">أرشيف الأيام السابقة (اضغط للمراجعة)</div>
     <div id="hist"></div>
   </div>
@@ -904,15 +1036,116 @@ input:focus {
   <div class="pad" id="archBody"></div>
 </div>
 
+<!-- Debts: person details -->
+<div id="pOv" class="ov h">
+  <div class="top">
+    <button id="pBack" aria-label="رجوع">→</button>
+    <span id="pTitle"></span>
+    <button class="top-act" id="pEdit">✎ تعديل</button>
+  </div>
+  <div class="pad" id="pBody"></div>
+</div>
+
+<!-- Debts: add debt / payment -->
+<div id="deOv" class="ov sub h">
+  <div class="top">
+    <button id="deBack" aria-label="رجوع">→</button>
+    <span id="deTitle"></span>
+  </div>
+  <div class="pad">
+    <div class="disp" id="deDisp">
+      <span>$</span>
+      <b id="deAmtView">0</b>
+      <button id="deBk" aria-label="مسح">⌫</button>
+    </div>
+    <div class="rem-row h" id="deRem"></div>
+    <div class="lb">ملاحظة / السبب (اختياري)</div>
+    <input id="deNote" type="text" autocomplete="off">
+    <div class="kp-hint">🔢 اضغط على المبلغ للعودة للوحة الأرقام</div>
+    <div class="lb">التاريخ</div>
+    <input id="deDate" type="date">
+  </div>
+  <div id="dkp"></div>
+  <button class="save" id="deSave">حفظ</button>
+</div>
+
+<!-- Debts: new / edit person -->
+<div id="pfOv" class="ov sub h">
+  <div class="top">
+    <button id="pfBack" aria-label="رجوع">→</button>
+    <span id="pfTitle">زبون جديد</span>
+  </div>
+  <div class="frm">
+    <div class="lb" style="margin-top:0">الاسم <span class="req">*</span></div>
+    <input id="pfName" type="text" autocomplete="off">
+    <div class="lb">رقم الهاتف (اختياري)</div>
+    <input id="pfPhone" type="tel" inputmode="tel" autocomplete="off">
+    <div class="lb">العنوان (اختياري)</div>
+    <input id="pfAddr" type="text" autocomplete="off">
+    <div class="box" id="pfDebtBox">
+      <div class="lb">مبلغ الدين (اختياري — يمكنك إضافته لاحقاً)</div>
+      <input id="pfAmt" type="number" inputmode="decimal" step="any" min="0">
+      <div class="lb">سبب الدين / ملاحظة (اختياري)</div>
+      <input id="pfNote" type="text" autocomplete="off">
+      <div class="lb">تاريخ الدين</div>
+      <input id="pfDate" type="date">
+    </div>
+    <button class="save" id="pfSave" style="margin:18px 0 0;width:100%">حفظ</button>
+    <button class="save d h" id="pfDel">🗑️ حذف الزبون وكل سجلّه</button>
+  </div>
+</div>
+
+<!-- Backup -->
+<div id="bkOv" class="ov sub h">
+  <div class="top">
+    <button id="bkBack" aria-label="رجوع">→</button>
+    <span>النسخ الاحتياطي</span>
+  </div>
+  <div class="frm">
+    <div class="lb" style="margin-top:0">انسخ بياناتك (الصندوق + الأرشيف + الديون) واحفظها في ملاحظات أو أرسلها لنفسك على واتساب. للاستعادة: الصق النص هنا واضغط استعادة.</div>
+    <button class="save" id="bkMake" style="margin:10px 0 0;width:100%">📤 تجهيز نسخة ونسخها</button>
+    <textarea class="bk" id="bkText" spellcheck="false" placeholder="هنا يظهر نص النسخة، أو الصق نسخة سابقة لاستعادتها"></textarea>
+    <button class="save d" id="bkRestore" style="color:var(--g);border-color:var(--g)">📥 استعادة من النص الملصق</button>
+  </div>
+</div>
+
+<!-- Wallet: add / pay -->
+<div id="wOv" class="ov sub h">
+  <div class="top">
+    <button id="wBack" aria-label="رجوع">→</button>
+    <span id="wTitle"></span>
+  </div>
+  <div class="pad">
+    <div class="disp" id="wDisp">
+      <span>$</span>
+      <b id="wAmtView">0</b>
+      <button id="wBk" aria-label="مسح">⌫</button>
+    </div>
+    <div class="rem-row" id="wRem"></div>
+    <div class="lb">السبب / ملاحظة</div>
+    <input id="wNote" type="text" autocomplete="off">
+    <div class="kp-hint">🔢 اضغط على المبلغ للعودة للوحة الأرقام</div>
+    <div class="lb">التاريخ</div>
+    <input id="wDate" type="date">
+  </div>
+  <div id="wkp"></div>
+  <button class="save" id="wSave">حفظ</button>
+</div>
+
+<div id="toast" class="toast h"></div>
+
 <script>
 const K = 'dlv-box-2';
 const TK = 'dlv-theme-pref';
-let S = { oU: 200, ph: '', tx: [], hist: [], names: [], expNotes: [] };
+let S = { oU: 200, ph: '', tx: [], hist: [], names: [], expNotes: [], debts: [], wallet: { entries: [] } };
 
 try {
   const r = localStorage.getItem(K);
   if (r) S = Object.assign(S, JSON.parse(r));
 } catch (e) {}
+
+if (!Array.isArray(S.debts)) S.debts = [];
+if (!S.wallet || !Array.isArray(S.wallet.entries)) S.wallet = { entries: [] };
 
 const save = () => {
   try { localStorage.setItem(K, JSON.stringify(S)); } catch (e) {}
@@ -1198,6 +1431,7 @@ function openE(m) {
   $('save').textContent = p ? 'حفظ الطلبية ✓' : 'حفظ المصروف ✓';
   $('note').placeholder = p ? 'ابحث أو اكتب اسم الطلبية / الزبون...' : 'ابحث أو اكتب نوع المصروف (بنزين، سحب...)';
   updateSuggestions();
+  $('ent').classList.remove('typing');
   $('ent').classList.remove('h');
 }
 
@@ -1377,7 +1611,531 @@ $('archDelBtn').onclick = () => {
   }
 };
 
+/* =====================================================================
+   Debts (الديون)
+   person = { id, name, phone, addr, created, entries:[...], cycles:[{id, closedAt, entries}] }
+   entry  = { id, type:'debt'|'pay', amt, note, date:'YYYY-MM-DD', time }
+   - entries = الفترة الحالية (الدين المفتوح). عند وصول المتبقي إلى صفر تُنقل إلى cycles
+     ويبقى الزبون محفوظاً في الأرشيف ويمكن إدانته من جديد.
+   ===================================================================== */
+const uid = () => Date.now() * 1000 + Math.floor(Math.random() * 1000);
+const r2 = v => Math.round(v * 100) / 100;
+const pad2 = v => String(v).padStart(2, '0');
+const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); };
+const nowTime = () => new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+const fmtD = s => (/^\d{4}-\d{2}-\d{2}$/.test(s || '') ? s.split('-').reverse().join('/') : (s || ''));
+const MS = (v, sign) => `<span class="num">${sign || ''}${f(v)}$</span>`;
+const balOf = list => r2((list || []).reduce((s, e) => s + (e.type === 'debt' ? n(e.amt) : -n(e.amt)), 0));
+const sumOf = (list, type) => r2((list || []).reduce((s, e) => s + (e.type === type ? n(e.amt) : 0), 0));
+const pBal = p => balOf(p.entries);
+const findP = id => S.debts.find(p => p.id === id);
+const isActive = p => p.entries.length > 0;
+const lastAct = p => Math.max(p.id || 0, ...p.entries.map(e => e.id || 0), ...p.cycles.map(c => c.id || 0));
+
+// make sure every stored person has the expected arrays
+S.debts.forEach(p => { p.entries = p.entries || []; p.cycles = p.cycles || []; });
+
+let toastT;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.remove('h');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.add('h'), 2400);
+}
+
+/* Tabs */
+let tab = 'box', dFilter = 'active', dQuery = '';
+function setTab(t) {
+  tab = t;
+  $('tabBox').classList.toggle('on', t === 'box');
+  $('tabDebt').classList.toggle('on', t === 'debts');
+  $('tabWallet').classList.toggle('on', t === 'wallet');
+  const show = { box: ['bal', 'list', 'fBox'], debts: ['dview', 'fDebt'], wallet: ['wview', 'fWallet'] };
+  ['bal', 'list', 'fBox', 'dview', 'fDebt', 'wview', 'fWallet'].forEach(i => $(i).classList.toggle('h', !show[t].includes(i)));
+  if (t === 'debts') renderDebts();
+  if (t === 'wallet') renderWallet();
+}
+
+function setDF(k) { dFilter = k; renderDebts(); }
+$('dsearch').oninput = e => { dQuery = e.target.value; renderDebts(); };
+$('newDebtBtn').onclick = () => openPF(null);
+
+function personCard(p) {
+  const act = isActive(p);
+  const ini = esc((p.name || '?').trim().charAt(0));
+  const meta = [p.phone, p.addr].filter(Boolean).map(esc).join(' · ');
+  const status = act
+    ? 'متبقي'
+    : (p.cycles.length ? `✅ مسدد${p.cycles.length > 1 ? ' (' + p.cycles.length + ' مرات)' : ''}` : 'بدون دين');
+  return `<div class="pc ${act ? '' : 'done'}" onclick="openPerson(${p.id})">
+    <div class="av">${ini}</div>
+    <div class="pi">
+      <div class="pn">${esc(p.name)}</div>
+      <div class="pm">${meta || '—'}</div>
+    </div>
+    <div class="pb">
+      ${act ? `<div class="pv">${M(pBal(p))}</div>` : ''}
+      <div class="ps">${status}</div>
+    </div>
+  </div>`;
+}
+
+function renderDebts() {
+  if (!$('dview')) return;
+  const act = S.debts.filter(isActive);
+  const done = S.debts.filter(p => !isActive(p));
+  const owed = r2(act.reduce((s, p) => s + pBal(p), 0));
+
+  $('dsum').innerHTML = `<div class="dsum">
+    <div class="bal-lbl">إجمالي الديون المستحقة لي</div>
+    <div class="bal-val">${M(owed)}</div>
+    <div class="bal-stats">
+      <div class="stat-pill"><span class="stat-k">زبائن عليهم دين</span><div class="stat-v">${act.length}</div></div>
+      <div class="stat-pill"><span class="stat-k">زبائن مسددون / مؤرشفون</span><div class="stat-v">${done.length}</div></div>
+    </div>
+  </div>`;
+
+  $('dseg').innerHTML = [['active', 'الحالية', act.length], ['settled', 'الأرشيف', done.length], ['all', 'الكل', S.debts.length]]
+    .map(([k, l, c]) => `<button class="segb ${dFilter === k ? 'on' : ''}" onclick="setDF('${k}')">${l} <span class="m2">(${c})</span></button>`).join('');
+
+  const q = normAr(dQuery);
+  let arr = dFilter === 'active' ? act : dFilter === 'settled' ? done : S.debts.slice();
+  if (q) arr = arr.filter(p => normAr(p.name).includes(q) || String(p.phone || '').includes(dQuery.trim()));
+  arr.sort((x, y) => lastAct(y) - lastAct(x));
+
+  $('dlist').innerHTML = arr.length
+    ? arr.map(personCard).join('')
+    : `<div class="empty-state">
+        <div class="empty-icon">📒</div>
+        <div style="font-weight:700;color:var(--tx);margin-bottom:4px">${q ? 'لا توجد نتائج' : (dFilter === 'settled' ? 'لا يوجد زبائن في الأرشيف بعد' : 'لا توجد ديون حالية')}</div>
+        <div>${q ? '' : 'اضغط <b>+ دين جديد</b> لإضافة زبون ودين'}</div>
+      </div>`;
+}
+
+/* Person details */
+let curP = null;
+function openPerson(id) {
+  curP = id;
+  renderPerson();
+  $('pOv').classList.remove('h');
+}
+
+function entryRow(e, canDel) {
+  const isDebt = e.type === 'debt';
+  const c = isDebt ? 'var(--r)' : 'var(--g)';
+  return `<div class="it">
+    <span class="dot" style="background:${c}"></span>
+    <div class="n">${isDebt ? 'دين' : 'دفعة'} <span class="m">· ${fmtD(e.date)}</span>
+      ${e.note ? `<div class="m enote">📝 ${esc(e.note)}</div>` : ''}
+    </div>
+    <span class="it-amt" style="color:${c}">${MS(n(e.amt), isDebt ? '+' : '−')}</span>
+    ${canDel ? `<button class="x" onclick="delEntry(${e.id})" aria-label="حذف">✕</button>` : ''}
+  </div>`;
+}
+const sortEntries = list => list.slice().sort((x, y) => (y.date || '').localeCompare(x.date || '') || y.id - x.id);
+
+function renderPerson() {
+  const p = findP(curP);
+  if (!p) { $('pOv').classList.add('h'); return; }
+  $('pTitle').textContent = p.name;
+  const act = isActive(p);
+  const b = pBal(p);
+  let h = '';
+
+  if (p.phone || p.addr) {
+    const tel = String(p.phone || '').replace(/[^\d+]/g, '');
+    h += `<div class="rep-card info-card">
+      ${p.phone ? `<div><a class="lnk" href="tel:${esc(tel)}">📞 <span class="num">${esc(p.phone)}</span></a></div>` : ''}
+      ${p.addr ? `<div>📍 ${esc(p.addr)}</div>` : ''}
+    </div>`;
+  }
+
+  if (act) {
+    h += `<div class="dhero">
+      <div class="bal-lbl">المتبقي عليه</div>
+      <div class="bal-val">${M(b)}</div>
+      <div class="bal-stats">
+        <div class="stat-pill"><span class="stat-k">إجمالي الدين</span><div class="stat-v">${M(sumOf(p.entries, 'debt'))}</div></div>
+        <div class="stat-pill"><span class="stat-k">المدفوع</span><div class="stat-v">${M(sumOf(p.entries, 'pay'))}</div></div>
+      </div>
+    </div>
+    <div class="act-row">
+      <button class="act-btn r" onclick="openDE('debt')">+ دين</button>
+      <button class="act-btn g" onclick="openDE('pay')">💰 دفعة</button>
+    </div>`;
+  } else {
+    h += `<div class="dhero ok">
+      <div class="bal-lbl">الحالة</div>
+      <div class="bal-val">${p.cycles.length ? '✅ مسدد بالكامل' : 'لا يوجد دين'}</div>
+      ${p.cycles.length ? `<div class="bal-lbl">سُدّد ${p.cycles.length} ${p.cycles.length > 1 ? 'مرات' : 'مرة'}</div>` : ''}
+    </div>
+    <div class="act-row one"><button class="act-btn r" onclick="openDE('debt')">+ دين جديد</button></div>`;
+  }
+
+  if (act) {
+    const list = sortEntries(p.entries);
+    h += `<div class="grp-card" style="margin-top:0">
+      <div class="gh" style="cursor:default"><span>📋 العمليات الحالية</span>
+        <span class="c" style="background:var(--amb)">${list.length}</span></div>
+      <div class="grp-body">${list.map(e => entryRow(e, true)).join('')}</div>
+    </div>`;
+  }
+
+  if (p.cycles.length) {
+    h += `<div class="lb" style="margin-top:18px">🗄️ سجل الديون المسددة سابقاً</div>`;
+    const cs = p.cycles.slice().reverse();
+    h += cs.map((c, i) => {
+      const tot = sumOf(c.entries, 'debt');
+      const canReopen = i === 0 && !act;
+      return `<details class="cyc">
+        <summary><span>📁 أُغلق ${fmtD(c.closedAt)}</span><span class="t">${M(tot)}</span></summary>
+        <div>${sortEntries(c.entries).map(e => entryRow(e, false)).join('')}</div>
+        ${canReopen ? `<button class="mini-btn" onclick="reopenCycle(${c.id})">↩ إعادة فتح هذا الدين (لتصحيح خطأ)</button>` : ''}
+      </details>`;
+    }).join('');
+  }
+
+  $('pBody').innerHTML = h;
+}
+
+$('pBack').onclick = () => { $('pOv').classList.add('h'); curP = null; renderDebts(); };
+$('pEdit').onclick = () => openPF(curP);
+
+function closeCycleIfSettled(p) {
+  if (p.entries.length && pBal(p) <= 0.004) {
+    p.cycles.push({ id: uid(), closedAt: todayStr(), entries: p.entries });
+    p.entries = [];
+    return true;
+  }
+  return false;
+}
+
+function delEntry(id) {
+  const p = findP(curP);
+  if (!p) return;
+  const e = p.entries.find(x => x.id === id);
+  if (!e) return;
+  if (!confirm('حذف هذه العملية؟')) return;
+  const rest = p.entries.filter(x => x.id !== id);
+  if (balOf(rest) < -0.004) {
+    alert('لا يمكن حذف هذا الدين لأن الدفعات ستصبح أكبر منه. احذف الدفعات أولاً.');
+    return;
+  }
+  p.entries = rest;
+  const settled = closeCycleIfSettled(p);
+  save();
+  renderPerson();
+  if (settled) toast('✅ أصبح الدين مسدداً');
+}
+
+function reopenCycle(cid) {
+  const p = findP(curP);
+  if (!p || p.entries.length) return;
+  const i = p.cycles.findIndex(c => c.id === cid);
+  if (i < 0) return;
+  if (!confirm('إعادة فتح هذا الدين؟ ستعود عملياته إلى القائمة الحالية.')) return;
+  p.entries = p.cycles[i].entries;
+  p.cycles.splice(i, 1);
+  save();
+  renderPerson();
+}
+
+/* Add debt / payment */
+let deMode = 'debt', deAmt = '';
+const deRender = () => { $('deAmtView').textContent = deAmt || '0'; };
+
+['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫'].forEach(k => {
+  const b = document.createElement('button');
+  b.textContent = k;
+  b.onclick = () => {
+    if (k == '⌫') deAmt = deAmt.slice(0, -1);
+    else if (k == '.') { if (deAmt.includes('.')) return; deAmt = deAmt || '0'; deAmt += '.'; }
+    else if (deAmt.length < 9) deAmt += k;
+    deRender();
+  };
+  $('dkp').appendChild(b);
+});
+$('deBk').onclick = () => { deAmt = deAmt.slice(0, -1); deRender(); };
+$('deBack').onclick = () => $('deOv').classList.add('h');
+
+function openDE(mode) {
+  const p = findP(curP);
+  if (!p) return;
+  if (mode === 'pay' && !isActive(p)) return;
+  deMode = mode;
+  deAmt = '';
+  deRender();
+  const isDebt = mode === 'debt';
+  $('deNote').value = '';
+  $('deDate').value = todayStr();
+  $('deTitle').textContent = (isDebt ? '➕ دين جديد — ' : '💰 دفعة — ') + p.name;
+  $('deDisp').classList.toggle('exp-mode', isDebt);
+  $('deSave').className = 'save' + (isDebt ? ' r' : '');
+  $('deSave').textContent = isDebt ? 'حفظ الدين ✓' : 'حفظ الدفعة ✓';
+  $('deNote').placeholder = isDebt ? 'سبب الدين (مثلاً: بضاعة، قرض...)' : 'ملاحظة على الدفعة';
+  $('deRem').innerHTML = isDebt ? '' : `<span>المتبقي: ${M(pBal(p))}</span><button type="button" class="chipbtn" onclick="payAll()">تسديد الكل</button>`;
+  $('deRem').classList.toggle('h', isDebt);
+  $('deOv').classList.remove('typing');
+  $('deOv').classList.remove('h');
+}
+
+function payAll() {
+  const p = findP(curP);
+  if (!p) return;
+  deAmt = String(pBal(p));
+  deRender();
+}
+
+$('deSave').onclick = () => {
+  const p = findP(curP);
+  if (!p) return;
+  const v = parseFloat(deAmt);
+  if (!v || v <= 0) { alert('أدخل المبلغ أولاً'); return; }
+  if (deMode === 'pay') {
+    const rem = pBal(p);
+    if (v > rem + 0.004) { alert(`المبلغ أكبر من المتبقي (${f(rem)}$)`); return; }
+  }
+  p.entries.push({
+    id: uid(), type: deMode, amt: v,
+    note: $('deNote').value.trim(),
+    date: $('deDate').value || todayStr(),
+    time: nowTime()
+  });
+  const settled = deMode === 'pay' && closeCycleIfSettled(p);
+  save();
+  $('deOv').classList.add('h');
+  renderPerson();
+  toast(settled ? '✅ تم التسديد الكامل — الزبون في الأرشيف' : (deMode === 'debt' ? 'تم تسجيل الدين ✓' : 'تم تسجيل الدفعة ✓'));
+};
+
+/* New / edit person */
+let pfEdit = null;
+function openPF(id) {
+  pfEdit = id;
+  const p = id ? findP(id) : null;
+  $('pfTitle').textContent = p ? 'تعديل بيانات الزبون' : 'زبون جديد / دين جديد';
+  $('pfName').value = p ? p.name : '';
+  $('pfPhone').value = p ? (p.phone || '') : '';
+  $('pfAddr').value = p ? (p.addr || '') : '';
+  $('pfAmt').value = '';
+  $('pfNote').value = '';
+  $('pfDate').value = todayStr();
+  $('pfDebtBox').classList.toggle('h', !!p);
+  $('pfDel').classList.toggle('h', !p);
+  $('pfSave').textContent = p ? 'حفظ التعديل ✓' : 'حفظ الزبون ✓';
+  $('pfOv').classList.remove('h');
+}
+$('pfBack').onclick = () => $('pfOv').classList.add('h');
+
+$('pfSave').onclick = () => {
+  const name = $('pfName').value.trim();
+  if (!name) { alert('اسم الشخص مطلوب'); return; }
+  const dup = S.debts.find(p => normAr(p.name) === normAr(name) && p.id !== pfEdit);
+  if (dup) {
+    if (confirm(`"${dup.name}" موجود مسبقاً. هل تريد فتح سجله؟`)) {
+      $('pfOv').classList.add('h');
+      openPerson(dup.id);
+    }
+    return;
+  }
+  const phone = $('pfPhone').value.trim();
+  const addr = $('pfAddr').value.trim();
+
+  if (pfEdit) {
+    const p = findP(pfEdit);
+    p.name = name; p.phone = phone; p.addr = addr;
+    save();
+    $('pfOv').classList.add('h');
+    renderPerson();
+    renderDebts();
+    return;
+  }
+
+  const p = { id: uid(), name, phone, addr, created: todayStr(), entries: [], cycles: [] };
+  const amt = parseFloat($('pfAmt').value);
+  if (amt > 0) {
+    p.entries.push({ id: uid(), type: 'debt', amt, note: $('pfNote').value.trim(), date: $('pfDate').value || todayStr(), time: nowTime() });
+  }
+  S.debts.push(p);
+  save();
+  $('pfOv').classList.add('h');
+  dFilter = amt > 0 ? 'active' : 'settled';
+  renderDebts();
+  openPerson(p.id);
+};
+
+$('pfDel').onclick = () => {
+  const p = findP(pfEdit);
+  if (!p) return;
+  if (!confirm(`حذف "${p.name}" وكل سجلّه نهائياً؟`)) return;
+  S.debts = S.debts.filter(x => x.id !== p.id);
+  save();
+  $('pfOv').classList.add('h');
+  $('pOv').classList.add('h');
+  curP = null;
+  renderDebts();
+};
+
+/* Backup / restore */
+$('bkOpen').onclick = () => { $('bkText').value = ''; $('bkOv').classList.remove('h'); };
+$('bkBack').onclick = () => $('bkOv').classList.add('h');
+$('bkMake').onclick = async () => {
+  const txt = JSON.stringify({ app: 'money-dl', v: 1, saved: new Date().toISOString(), data: S });
+  $('bkText').value = txt;
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) {}
+  if (!ok) {
+    try { $('bkText').select(); ok = document.execCommand('copy'); } catch (e) {}
+  }
+  toast(ok ? 'تم نسخ النسخة الاحتياطية ✓' : 'حدد النص يدوياً وانسخه');
+};
+$('bkRestore').onclick = () => {
+  let obj;
+  try { obj = JSON.parse($('bkText').value.trim()); } catch (e) { alert('النص غير صالح'); return; }
+  const d = obj && obj.app === 'money-dl' ? obj.data : null;
+  if (!d || !Array.isArray(d.tx) || !Array.isArray(d.hist)) { alert('هذا ليس نص نسخة احتياطية صالحة'); return; }
+  if (!confirm('سيتم استبدال كل البيانات الحالية بالنسخة الملصقة. متابعة؟')) return;
+  S = Object.assign({ oU: 200, ph: '', tx: [], hist: [], names: [], expNotes: [], debts: [], wallet: { entries: [] } }, d);
+  S.debts = Array.isArray(S.debts) ? S.debts : [];
+  if (!S.wallet || !Array.isArray(S.wallet.entries)) S.wallet = { entries: [] };
+  S.debts.forEach(p => { p.entries = p.entries || []; p.cycles = p.cycles || []; });
+  save();
+  $('bkOv').classList.add('h');
+  render();
+  renderDebts();
+  renderWallet();
+  toast('تمت الاستعادة ✓');
+};
+
+/* =====================================================================
+   Phone keyboard vs. app keypad: while typing a note, hide the app keypad
+   so the save button rises and stays reachable above the phone keyboard.
+   ===================================================================== */
+function bindTyping(ovId, inputId, dispId, saveId) {
+  const ov = $(ovId), inp = $(inputId);
+  const off = () => { ov.classList.remove('typing'); inp.blur(); };
+  inp.addEventListener('focus', () => ov.classList.add('typing'));
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') off(); });
+  $(dispId).addEventListener('click', e => { if (!e.target.closest('button')) off(); });
+  // keep the phone keyboard open while pressing save, so the layout does not jump under the finger
+  $(saveId).addEventListener('mousedown', e => e.preventDefault());
+}
+bindTyping('ent', 'note', 'dispBox', 'save');
+bindTyping('deOv', 'deNote', 'deDisp', 'deSave');
+bindTyping('wOv', 'wNote', 'wDisp', 'wSave');
+
+// if the user closes the phone keyboard (back gesture), bring the keypad back
+let baseH = window.innerHeight;
+window.addEventListener('resize', () => {
+  const h = window.innerHeight;
+  baseH = Math.max(baseH, h);
+  if (h >= baseH - 60) {
+    document.querySelectorAll('.ov.typing').forEach(o => { o.classList.remove('typing'); if (document.activeElement) document.activeElement.blur(); });
+  }
+});
+
+/* =====================================================================
+   Wallet (محفظتي): entry = { id, type:'in'|'out', amt, note, date, time }
+   ===================================================================== */
+const wEntries = () => S.wallet.entries;
+const wBal = () => r2(wEntries().reduce((s, e) => s + (e.type === 'in' ? n(e.amt) : -n(e.amt)), 0));
+let wFilter = 'all', wMode = 'in', wAmt = '';
+
+function renderWallet() {
+  if (!$('wview')) return;
+  const list = wEntries();
+  const bal = wBal();
+  const tin = r2(list.reduce((s, e) => s + (e.type === 'in' ? n(e.amt) : 0), 0));
+  const tout = r2(list.reduce((s, e) => s + (e.type === 'out' ? n(e.amt) : 0), 0));
+
+  $('wsum').innerHTML = `<div class="whero ${bal < 0 ? 'neg-bal' : ''}">
+    <div class="bal-lbl">رصيد محفظتي</div>
+    <div class="bal-val">${M(bal)}</div>
+    <div class="bal-stats">
+      <div class="stat-pill"><span class="stat-k">مجموع الإضافات</span><div class="stat-v">${M(tin)}</div></div>
+      <div class="stat-pill"><span class="stat-k">مجموع المدفوعات</span><div class="stat-v">${M(tout)}</div></div>
+    </div>
+  </div>`;
+
+  $('wseg').innerHTML = [['all', 'الكل', list.length], ['in', 'الإضافات', list.filter(e => e.type === 'in').length], ['out', 'المدفوعات', list.filter(e => e.type === 'out').length]]
+    .map(([k, l, c]) => `<button class="segb ${wFilter === k ? 'on' : ''}" onclick="setWF('${k}')">${l} <span class="m2">(${c})</span></button>`).join('');
+
+  const arr = sortEntries(list.filter(e => wFilter === 'all' || e.type === wFilter));
+  $('wlist').innerHTML = arr.length
+    ? `<div class="grp-card"><div class="grp-body">${arr.map(e => {
+        const isIn = e.type === 'in';
+        const c = isIn ? 'var(--g)' : 'var(--r)';
+        return `<div class="it">
+          <span class="dot" style="background:${c}"></span>
+          <div class="n">${esc(e.note || (isIn ? 'إضافة' : 'دفع'))} <span class="m">· ${fmtD(e.date)}</span></div>
+          <span class="it-amt" style="color:${c}">${MS(n(e.amt), isIn ? '+' : '−')}</span>
+          <button class="x" onclick="delW(${e.id})" aria-label="حذف">✕</button>
+        </div>`;
+      }).join('')}</div></div>`
+    : `<div class="empty-state">
+        <div class="empty-icon">👛</div>
+        <div style="font-weight:700;color:var(--tx);margin-bottom:4px">لا توجد عمليات في المحفظة</div>
+        <div>اضغط <b>+ إضافة</b> لإضافة مال، أو <b>− دفع</b> لتسجيل مبلغ دفعته</div>
+      </div>`;
+}
+function setWF(k) { wFilter = k; renderWallet(); }
+
+function delW(id) {
+  if (!confirm('حذف هذه العملية؟')) return;
+  S.wallet.entries = wEntries().filter(e => e.id !== id);
+  save();
+  renderWallet();
+}
+
+const wRender = () => { $('wAmtView').textContent = wAmt || '0'; };
+['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫'].forEach(k => {
+  const b = document.createElement('button');
+  b.textContent = k;
+  b.onclick = () => {
+    if (k == '⌫') wAmt = wAmt.slice(0, -1);
+    else if (k == '.') { if (wAmt.includes('.')) return; wAmt = wAmt || '0'; wAmt += '.'; }
+    else if (wAmt.length < 9) wAmt += k;
+    wRender();
+  };
+  $('wkp').appendChild(b);
+});
+$('wBk').onclick = () => { wAmt = wAmt.slice(0, -1); wRender(); };
+$('wBack').onclick = () => $('wOv').classList.add('h');
+
+function openW(mode) {
+  wMode = mode;
+  wAmt = '';
+  wRender();
+  const isIn = mode === 'in';
+  $('wNote').value = '';
+  $('wDate').value = todayStr();
+  $('wTitle').textContent = isIn ? '➕ إضافة إلى المحفظة' : '➖ دفع من المحفظة';
+  $('wDisp').classList.toggle('exp-mode', !isIn);
+  $('wSave').className = 'save' + (isIn ? '' : ' r');
+  $('wSave').textContent = isIn ? 'حفظ الإضافة ✓' : 'حفظ الدفعة ✓';
+  $('wNote').placeholder = isIn ? 'سبب الإضافة (راتب، تحصيل، ...)' : 'سبب الدفع (إيجار، شراء، ...)';
+  $('wRem').innerHTML = `<span>الرصيد الحالي: ${M(wBal())}</span>`;
+  $('wOv').classList.remove('typing');
+  $('wOv').classList.remove('h');
+}
+$('wIn').onclick = () => openW('in');
+$('wOut').onclick = () => openW('out');
+
+$('wSave').onclick = () => {
+  const v = parseFloat(wAmt);
+  if (!v || v <= 0) { alert('أدخل المبلغ أولاً'); return; }
+  if (wMode === 'out' && v > wBal() + 0.004 && !confirm(`المبلغ أكبر من رصيد المحفظة (${f(wBal())}$). هل تريد المتابعة؟`)) return;
+  S.wallet.entries.push({ id: uid(), type: wMode, amt: v, note: $('wNote').value.trim(), date: $('wDate').value || todayStr(), time: nowTime() });
+  save();
+  $('wOv').classList.add('h');
+  renderWallet();
+  toast(wMode === 'in' ? 'تمت الإضافة ✓' : 'تم تسجيل الدفع ✓');
+};
+
 render();
+renderDebts();
+renderWallet();
 </script>
 </body>
 </html>
